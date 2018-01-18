@@ -29,8 +29,10 @@
           </div>
       </nav>
       <div class="container mt-5 mb-5 text-center">
-          <h1 class="display-4 mb-4">Homework 1</h1>
-          <p class="lead mb-5">Write a program that asks the user for a number n and prints the sum of the numbers 1 to n</p>
+          {% if assignment %}
+          <h1 class="display-4 mb-4">{{ assignment.title }}</h1>
+          <p class="lead mb-5">{{ assignment.description }}</p>
+          {% endif %}
           <div id="editor" class="ace-dawn mx-auto"></div>
           <div>
               <button type="button" class="btn btn-outline-success" onclick="codeSubmission();">Submit</button>

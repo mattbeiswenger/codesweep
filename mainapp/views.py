@@ -15,7 +15,7 @@ def hw(request):
 def show_assignment(request, assignment_name_slug):
     try:
         context_dict = {}
-        assignment = Assignment.obkects.get(slug=category_name_slug)
+        assignment = Assignment.objects.get(slug=assignment_name_slug)
         context_dict['assignment'] = assignment
     except Category.DoesNotExist:
         context_dict['assignment'] = None
