@@ -26,29 +26,46 @@
             </div>
           </div>
       </nav>
-      <div class="container pt-5 h-50">
-      {% if assignments %}
-      {% for assignment in assignments %}
-          <div class="card mt-5">
-              <div class="card-header">
-                  <div>
-                      Due {{ assignment.date }} at {{ assignment.time }}
-                      <div class="float-right">
-                          Points: {{ assignment.points }}
+      <div class="container pt-5">
+          <div class="row justify-content-between">
+              <div class="col-md-auto mt-5">
+                  <div class="card" style="width: 18rem;">
+                      <div class="card-header">
+                          Classes
                       </div>
+                      <ul class="list-group list-group-flush">
+                          <li class="list-group-item">CSC 160</li>
+                          <li class="list-group-item">CSC 161</li>
+                          <li class="list-group-item">CSC 210</li>
+                      </ul>
                   </div>
               </div>
-              <div class="card-body">
-                  <h5 class="card-title">{{ assignment.title }}</h5>
-                  <p class="card-text">{{ assignment.description }}</p>
-                  <a href="{{ assignment.slug }}" class="btn btn-primary float-right btn-info">Get Started</a>
+              <div class="col col-lg-8">
+                  {% if assignments %}
+                  {% for assignment in assignments %}
+                      <div class="card mt-5">
+                          <div class="card-header">
+                              <div>
+                                  Due {{ assignment.date }} at {{ assignment.time }}
+                                  <div class="float-right">
+                                      Points: {{ assignment.points }}
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="card-body">
+                              <h5 class="card-title">{{ assignment.title }}</h5>
+                              <p class="card-text">{{ assignment.description }}</p>
+                              <a href="{{ assignment.slug }}" class="btn btn-primary float-right btn-info">Get Started</a>
+                          </div>
+                      </div>
+                  {% endfor %}
+
               </div>
           </div>
-      {% endfor %}
-      {% else %}
-      <div class="display-3 text-center mt-4"> Homework will be posted momentarily </div>
-      {% endif %}
-      </div>
+          {% else %}
+          <div class="display-3 text-center mt-4"> Homework will be posted momentarily </div>
+          {% endif %}
+        </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
