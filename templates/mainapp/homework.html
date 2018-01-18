@@ -31,7 +31,7 @@
       {% for assignment in assignments %}
           <div class="card mt-5">
               <div class="card-header">
-                  <div> 
+                  <div>
                       Due {{ assignment.date }} at {{ assignment.time }}
                       <div class="float-right">
                           Points: {{ assignment.points }}
@@ -41,44 +41,14 @@
               <div class="card-body">
                   <h5 class="card-title">{{ assignment.title }}</h5>
                   <p class="card-text">{{ assignment.description }}</p>
+                  <a href="{{ assignment.slug }}" class="btn btn-primary float-right btn-info">Get Started</a>
               </div>
           </div>
       {% endfor %}
       {% else %}
-      <strong> Homework will be posted momentarily </strong>
+      <div class="display-3 text-center mt-4"> Homework will be posted momentarily </div>
       {% endif %}
       </div>
-          <!-- <div class="row">
-              <div class="col">
-                  <div class="card" style="width: 18rem">
-                      <div class="card-body">
-                          <h5 class="card-title">Homework 1</h5>
-                          <p class="card-text">Write a program that asks the user for a number n and prints the sum of the numbers 1 to n</p>
-                          <a href="projectpage.html" class=" bg-info border-info btn btn-primary">Get started</a>
-                      </div>
-                  </div>
-              </div>
-              <div class="col">
-                  <div class="card" style="width: 18rem">
-                      <div class="card-body">
-                          <h5 class="card-title">Homework 2</h5>
-                          <p class="card-text">Write a program that prints a multiplication table for numbers up to 12.</p>
-                          <a href="#" class="bg-info border-info btn btn-primary">Get started</a>
-                      </div>
-                  </div>
-              </div>
-              <div class="col">
-                  <div class="card" style="width: 18rem">
-                      <div class="card-body">
-                          <h5 class="card-title">Homework 3</h5>
-                          <p class="card-text">Write a guessing game where the user has to guess a secret number. After every guess the program tells the user whether their number was too large or too small. At the end the number of tries needed should be printed. I counts only as one try if they input the same number multiple times consecutively.</p>
-                          <a href="#" class="bg-info border-info  btn btn btn-primary">Get started</a>
-                      </div>
-                  </div>
-              </div>
-          </div> -->
-
-
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
