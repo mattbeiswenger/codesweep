@@ -16,7 +16,6 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
-MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,7 +27,7 @@ SECRET_KEY = '$r%bq26p2%(77#4wfa4d&zxb^!5j7v8&_t4^9&enoz2c#a+e%9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -117,9 +116,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-# media staticfiles
-MEDIA_ROOT = MEDIA_DIR
-MEDIA_URL = '/media/'
+
 
 
 # Static files (CSS, JavaScript, Images)

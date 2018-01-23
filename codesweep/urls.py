@@ -21,7 +21,7 @@ from mainapp import views
 from django.conf.urls import include
 
 urlpatterns = [
-    url(r'^$', views.login, name="login"),
-    url(r'^homework/', include('mainapp.urls')),
+    url(r'^$', views.index, name="index"),
+    url(r'^assignments/', include('mainapp.urls')),
     url(r'^admin/', admin.site.urls),
 ]
