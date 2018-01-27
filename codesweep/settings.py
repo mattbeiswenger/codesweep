@@ -27,7 +27,10 @@ SECRET_KEY = '$r%bq26p2%(77#4wfa4d&zxb^!5j7v8&_t4^9&enoz2c#a+e%9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
+
+NOSE_ARGS = ['--nocapture',
+             '--nologcapture',]
 
 
 # Application definition

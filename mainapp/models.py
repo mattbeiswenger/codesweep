@@ -7,8 +7,10 @@ class Assignment(models.Model):
     title = models.CharField(max_length=128, unique=True)
     points = models.IntegerField(default=0)
     description = models.TextField()
-    date = models.DateField()
+    due_date = models.DateField()
     time = models.TimeField()
+    inputs = models.TextField()
+    function_name = models.CharField(max_length=128)
 
     slug = models.SlugField(unique=True)
 
