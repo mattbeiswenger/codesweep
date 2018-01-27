@@ -11,13 +11,10 @@ from django.contrib.auth.models import User
 from mainapp.models import Assignment
 from django.http import Http404, HttpResponseNotFound
 import os
-import json
-# for debugging
-import sys
 import urllib.parse
 
-
-# Create your views here.
+# for debugging
+import sys
 
 
 def index(request):
@@ -45,6 +42,7 @@ def submit_text(request):
 
     if request.method == 'POST':
 
+        # decode data
         data = request.body.decode('utf-8')
         data = urllib.parse.unquote(data)
 
@@ -86,10 +84,11 @@ def submit_text(request):
         f.write("output.write(str(fib(int(line))) + '\\n')")
         f.write("\n\n")
 
-
+        # create if __name__ == '__main__'
         f.write("if __name__ == '__main__':\n\tMain()")
 
         f.close()
+
         # retrieve the inputs from the assignment object with
         # the correlating assignment title
         inputs = Assignment.objects.get(title="Homework 1").inputs
@@ -106,12 +105,11 @@ def submit_text(request):
         os.chdir(downloads_folder)
         os.system('python3 codetext.py input.txt output.txt')
 
+        return HttpResponse("Code has executed")
 
-        return HttpResponse("Hello")
     else:
+
         raise Http404()
-
-
 
 
 
@@ -120,43 +118,40 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
 
+
+
 def user_login(request):
 
     if request.method == 'POST':
-        # Gather the username and password provided by the user.
-        # This information is obtained from the login form.
-        # We use request.POST.get('<variable>') as opposed
-        # to request.POST['<variable>'], because the
-        # request.POST.get('<variable>') returns None if the
-        # value does not exist, while request.POST['<variable>']
-        # will raise a KeyError exception.
+
+        # retrieve username and password
         username = request.POST.get('username')
         password = request.POST.get('password')
-        # Use Django's machinery to attempt to see if the username/password
-        # combination is valid - a User object is returned if it is.
+
+        # authenticate user
         user = authenticate(username=username, password=password)
-        # If we have a User object, the details are correct.
-        # If None (Python's way of representing the absence of a value), no user
-        # with matching credentials was found.
 
+        # if we have a User object, the details are correct
+        # if None (Python's way of representing the absence of a value), no user
+        # with matching credentials was found
         if user:
-            # Is the account active? It could have been disabled.
-            if user.is_active:
-                # If the account is valid and active, we can log the user in.
-                # We'll send the user back to the homepage.
-                login(request, user)
 
+            # check that account is not disabled
+            if user.is_active:
+
+                # log the user in
+                login(request, user)
                 return assignments(request)
             else:
-                # An inactive account was used - no logging in!
+
+                # an inactive account was used
                 return HttpResponse("Your account is disabled.")
         else:
-            # Bad login details were provided. So we can't log the user in.
+
+            # no user credentials were found
             print("Invalid login details: {0}, {1}".format(username, password))
             return HttpResponse("Invalid login details supplied.")
-                # The request is not a HTTP POST, so display the login form.
-                # This scenario would most likely be a HTTP GET.
+
+    # the request is not a HTTP POST
     else:
-        # No context variables to pass to the template system, hence the
-        # blank dictionary object...
         raise Http404()
