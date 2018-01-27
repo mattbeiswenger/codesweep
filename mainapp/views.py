@@ -62,7 +62,6 @@ def submit_text(request):
         # create paths to individual files
         code_path = os.path.join(downloads_folder, 'codetext.py')
         input_path = os.path.join(downloads_folder, 'input.txt')
-        output_path = os.path.join(downloads_folder, 'output.txt')
 
         # open files
         f = open(code_path, 'w')

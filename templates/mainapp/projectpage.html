@@ -32,24 +32,20 @@
             </div>
           </div>
       </nav>
-      <div class="container mt-5 mb-5 text-center">
-          {% if assignment %}
-          <h1 class="display-4 mb-4">{{ assignment.title }}</h1>
-          <p class="lead mb-5">{{ assignment.description }}</p>
-          {% endif %}
-          <!-- <form method="get" action="{% url 'submit_text' %}">
-              <input type="hidden" name="code" />
-              <div id="editor" class="ace-dawn mx-auto"></div>
-              <div>
-                  <input type="submit" id="submit-button" class="btn btn-outline-success" value="Submit" />
+      <div class="container mt-5 mb-5">
+          <div class="row justify-content-between">
+              <div class="col col-lg-8 mb-5">
+                  {% if assignment %}
+                  <h1 class="display-4 mb-4">{{ assignment.title }}</h1>
+                  <p class="lead mb-5">{{ assignment.description }}</p>
+                  {% endif %}
+                  <div id="editor" class="ace-dawn mx-auto"></div>
+                  <div>
+                      <button id="submit-button" class="btn btn-outline-success float-right">Run Code</button>
+                  </div>
               </div>
-          </form> -->
+          </div>
 
-
-              <div id="editor" class="ace-dawn mx-auto"></div>
-              <div>
-                  <button id="submit-button" class="btn btn-outline-success">Submit</button>
-              </div>
 
 
       </div>
@@ -75,20 +71,6 @@
         editor.setValue("def {{ assignment.function_name }}(num):\n\t#insert code here\n\t")
         editor.gotoLine(3);
         editor.getSession().setTabSize(4);
-        // $(document).ready(function(){
-        //     $('#submit-button').click(function(){
-        //         var $editor = $('#editor');
-        //         if ($editor.length > 0) {
-        //             $editor.closest('form').submit(function() {
-        //                 var code = editor.getValue();
-        //                 $editor.prev('input[type=hidden]').val(code);
-        //             });
-        //         }
-        //     })
-        // })
-
-
-
 
         $(document).ready(function(){
             $('#submit-button').click(function(){
