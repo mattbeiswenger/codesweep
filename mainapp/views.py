@@ -1,17 +1,17 @@
 from django.shortcuts import render
-from mainapp.models import Assignment
-from django.contrib.auth import authenticate
-from django.contrib.auth import login, logout
-from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
+from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
-from django.views.decorators.http import require_POST, require_GET
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import (require_POST, require_GET,
+                                        require_http_methods)
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from mainapp.models import Assignment
-from django.http import Http404, HttpResponseNotFound
+from django.http import (Http404, HttpResponseNotFound, HttpResponseRedirect,
+                        HttpResponse, HttpRequest)
+
+# modules for code submission
 import os
-import urllib.parse
+import subprocess
 
 # for debugging
 import sys
@@ -42,19 +42,39 @@ def submit_text(request):
 
     if request.method == 'POST':
 
-        # decode data
-        data = request.body.decode('utf-8')
-        data = urllib.parse.unquote(data)
+        # retrieve data
+        data = request.POST
+        # create string for submitted code
+        data = data['code_text']
+        # remove beginning and end quotes
+        data = data[1:-1]
 
-        data = data.split('"')
-        # replace spaces
-        data = data[1].replace('+', ' ')
+
+        # # decode data
+        # data = request.body.decode('utf-8')
+        #
+        # # sys.stderr.write(repr(data) + '\n')
+        #
+        # data = urllib.parse.unquote(data)
+        #
+        # # sys.stderr.write(repr(data) + '\n')
+
+        # data = data.split('"')
+        # # replace spaces
+        # data = data[1].replace('+', ' ')
+
+        # ----- only allow escape characters in quotes ----- #
+
+        data_list = data.split("'")
+
+        sys.stderr.write(repr(data_list) + '\n')
+
         # replace newline
         data = data.replace('\\n', '\n')
         # replace tabs
         data = data.replace('\\t', '\t')
 
-        # sys.stderr.write(repr(data) + '\n')
+
 
         # create path to downloads folder
         downloads_folder = ('/Users/matthewbeiswenger/Downloads')
@@ -74,13 +94,14 @@ def submit_text(request):
         # write users code to the file
         f.write(data)
 
+        function = Assignment.objects.get(title="Homework 1").function_name
         # create sys Main() function
         f.write("\n\n")
         f.write("def Main():\n\t")
         f.write("with open(sys.argv[1], 'r') as input, " + \
             "open(sys.argv[2], 'w') as output:\n\t\t")
         f.write("for line in input:\n\t\t\t")
-        f.write("output.write(str(fib(int(line))) + '\\n')")
+        f.write("output.write(str(" + function + "(int(line))) + '\\n')")
         f.write("\n\n")
 
         # create if __name__ == '__main__'

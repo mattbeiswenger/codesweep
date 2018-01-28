@@ -1,6 +1,5 @@
 from django.contrib import admin
-from mainapp.models import Assignment
-from mainapp.models import UserProfile
+from mainapp.models import Assignment, UserProfile
 
 # Register your models here.
 
