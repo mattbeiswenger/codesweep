@@ -11,7 +11,9 @@ from django.http import (Http404, HttpResponseNotFound, HttpResponseRedirect,
 
 # modules for code submission
 import os
+import datetime
 import subprocess
+
 
 # for debugging
 import sys
@@ -44,43 +46,42 @@ def submit_text(request):
 
         # retrieve data
         data = request.POST
+
         # create string for submitted code
-        data = data['code_text']
+        code = data['code_text']
         # remove beginning and end quotes
-        data = data[1:-1]
+        code = code[1:-1]
+
+        # create string for title
+        assignment_title = data['assignment_title']
+        # replace spaces with underscores
+        assignment_title = assignment_title.replace(" ", "+")
+
+        user = data['user']
+
+        # date and time of submission
+        currentDT = datetime.datetime.now()
+        currentDT = currentDT.strftime("%Y-%m-%d_%H:%M:%S")
+
+        # create unique filename
+        filename = "{}_{}_{}".format(user, assignment_title, currentDT)
+
+        # ----- only allow escape characters that are between quotes ----- #
+
+        code_list = code.split("'")
 
 
-        # # decode data
-        # data = request.body.decode('utf-8')
-        #
-        # # sys.stderr.write(repr(data) + '\n')
-        #
-        # data = urllib.parse.unquote(data)
-        #
-        # # sys.stderr.write(repr(data) + '\n')
-
-        # data = data.split('"')
-        # # replace spaces
-        # data = data[1].replace('+', ' ')
-
-        # ----- only allow escape characters in quotes ----- #
-
-        data_list = data.split("'")
-
-        sys.stderr.write(repr(data_list) + '\n')
 
         # replace newline
-        data = data.replace('\\n', '\n')
+        code = code.replace('\\n', '\n')
         # replace tabs
-        data = data.replace('\\t', '\t')
-
-
+        code = code.replace('\\t', '\t')
 
         # create path to downloads folder
         downloads_folder = ('/Users/matthewbeiswenger/Downloads')
 
         # create paths to individual files
-        code_path = os.path.join(downloads_folder, 'codetext.py')
+        code_path = os.path.join(downloads_folder, filename)
         input_path = os.path.join(downloads_folder, 'input.txt')
 
         # open files
@@ -92,7 +93,7 @@ def submit_text(request):
         f.write("\n\n")
 
         # write users code to the file
-        f.write(data)
+        f.write(code)
 
         function = Assignment.objects.get(title="Homework 1").function_name
         # create sys Main() function
@@ -123,7 +124,7 @@ def submit_text(request):
 
         # execute the code
         os.chdir(downloads_folder)
-        os.system('python3 codetext.py input.txt output.txt')
+        os.system('python3 codetext.py input.txt ' + filename + '_outputs.txt')
 
         return HttpResponse("Code has executed")
 

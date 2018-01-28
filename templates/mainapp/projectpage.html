@@ -82,6 +82,8 @@
                     data:
                     {
                         "code_text": JSON.stringify(text),
+                        "assignment_title": "{{ assignment.title }}",
+                        "user": "{{ request.user.username }}",
                         "csrfmiddlewaretoken": "{{ csrf_token }}"
                     },
                 });
