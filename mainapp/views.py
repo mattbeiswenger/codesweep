@@ -64,11 +64,18 @@ def submit_text(request):
         currentDT = currentDT.strftime("%Y-%m-%d_%H:%M:%S")
 
         # create unique filename
-        filename = "{}_{}_{}".format(user, assignment_title, currentDT)
+        filename = "{}_{}_{}.py".format(user, assignment_title, currentDT)
 
         # ----- only allow escape characters that are between quotes ----- #
 
-        code_list = code.split("'")
+        # code_list = code.split("'")
+        # sys.stderr.write(str(code_list) + '\n')
+        # for index, item in enumerate(code_list[0::2]):
+        #     item = item.replace('\\n', '\n')
+        #     item = item.replace('\\t', '\t')
+        #
+        # sys.stderr.write(str(code_list) + '\n')
+
 
 
 
@@ -96,6 +103,7 @@ def submit_text(request):
         f.write(code)
 
         function = Assignment.objects.get(title="Homework 1").function_name
+
         # create sys Main() function
         f.write("\n\n")
         f.write("def Main():\n\t")
@@ -124,7 +132,8 @@ def submit_text(request):
 
         # execute the code
         os.chdir(downloads_folder)
-        os.system('python3 codetext.py input.txt ' + filename + '_outputs.txt')
+        os.system('python3 ' + filename + ' input.txt ' + \
+            filename + '_outputs.txt')
 
         return HttpResponse("Code has executed")
 

@@ -12,6 +12,8 @@ class Assignment(models.Model):
     inputs = models.TextField()
     function_name = models.CharField(max_length=128)
     slug = models.SlugField(unique=True)
+    instructions_file = models.FileField(blank=True, null=True,
+        upload_to='instruction_files/%Y/%m/%D')
 
     # slug feature
     def save(self, *args, **kwargs):
