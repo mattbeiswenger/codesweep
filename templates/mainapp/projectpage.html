@@ -7,11 +7,10 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Ace CSS -->
-    <link rel="stylesheet" type="text/css" href="../../static/css/ace_styles.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
-
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="../../static/css/styles.css">
 
 
 
@@ -35,15 +34,22 @@
       <div class="container mt-5 mb-5">
           <div class="row justify-content-between">
               <div class="col col-lg-8 mb-5">
-                  {% if assignment %}
                   <h1 class="display-4 mb-4">{{ assignment.title }}</h1>
+                  {% if assignment.description %}
                   <p class="lead mb-4">{{ assignment.description }}</p>
-                  <a class="btn btn-info mb-5" href="/media/{{ assignment.instructions_file}}">Instructions</a>
-                  <!-- <canvas id="pdf-canvas"></canvas> -->
                   {% endif %}
-                  <div id="editor" class="ace-dawn mx-auto"></div>
+                  {% if assignment.instructions_file %}
+                  <p>Attachments:</p>
+                  <a class="btn btn-info mb-5" href="/media/{{ assignment.instructions_file}}">Instructions</a>
+
+                  {% endif %}
+                  <div id="editor" class="ace-dawn mx-auto mb-0"></div>
+                  <div id="editor-footer" class="mb-4 container">
+                      <button id="submit-button" class="btn btn-info mt-3">Run Code</button>
+                      <button class="btn btn-info mt-3 float-right" id="fullscreen-button"><img src="../../static/images/glyphicons-350-fullscreen.png" /></button>
+                  </div>
                   <div>
-                      <button id="submit-button" class="btn btn-outline-success float-right">Run Code</button>
+
                   </div>
               </div>
           </div>
@@ -97,6 +103,11 @@
                     },
                 });
             });
+
+            $('#fullscreen-button').click(function(){
+
+                $('#editor').css("width","1000px");;
+            })
         });
 
         // -------- PDF.js ----------- //
