@@ -67,8 +67,100 @@ def submit_text(request):
         # create unique filename
         filename = "{}_{}_{}.py".format(user, assignment_title, currentDT)
 
-        # un-escape backslash-escaped string
-        code = bytes(code, "utf-8").decode("unicode_escape")
+        # ----- only allow escape characters that are between quotes ----- #
+
+
+        inDoubleQuotes = False
+        inSingleQuotes = False
+
+
+        # for i, item in enumerate(code):
+        #
+        #     print(code[i])
+        #     # if we come across a non-escaped double quote,
+        #     # toggle flag on or off
+        #     if code[i] != "\\" and code[i + 1] == '"':
+        #         if inDoubleQuotes == True:
+        #             inDoubleQuotes = False
+        #         else:
+        #             inDoubleQuotes = False
+        #
+        #     # if we come across a non-escaped single quote,
+        #     # toggle flag on or off
+        #     if code[i] != "\\" and code[i + 1] == "'":
+        #         if inSingleQuotes == True:
+        #             inSingleQuotes = False
+        #         else:
+        #             inSingleQuotes = False
+        #
+        #     # if we are in double quotes and we reach an escaped double
+        #     # quote, replace it with equivalent
+        #     if inDoubleQuotes and code[i] == "\\" and code[i + 1] == '"':
+        #         code = code[i:i+2].replace('\\"', '\"')
+        #
+        #
+        #     # if we are in single quotes and we reach an escaped single
+        #     # quote, replace it with equivalent
+        #     if inSingleQuotes and code[i] == "\\" and code[i + 1] == "'":
+        #         code = code[i:i+2].replace("\\'", "\'")
+        #
+        #     # if we come across a newline character that is not
+        #     # inside single or double quotes, replace it with equivalent
+        #     if code[i] == "\\" and code[i + 1] == "n":
+        #         if not inSingleQuotes and not inDoubleQuotes:
+        #             code = code[i:i+2].replace("\\n", "\n")
+
+
+        downloads_folder = ('/Users/matthewbeiswenger/Downloads')
+        practice_path = os.path.join(downloads_folder, 'practice.txt')
+        p = open(practice_path, 'w')
+
+        p.write("CODE BEFORE\n")
+        p.write(code + '\n')
+        p.write(repr(code) + '\n')
+        p.write('\n')
+
+        # code = re.sub(r'(\\\\)+', r"\\", code)
+        # code = re.sub(r'(\\)+', r"\\", repr(code))
+        # code = re.sub(r'(\\)+', r'\\', code)
+        # code = code.replace(r'\\', '\\')
+
+        # code = re.sub(r'(\\)+n', r'\n', code)
+        # # p.write(code + '\n')
+        # code = re.sub(r'(\\)+t', r'\t', code)
+        # # p.write(code + '\n')
+        # code = re.sub(r'(\\)+"', r'\"', code)
+        # # p.write(code + '\n')
+        # code = re.sub(r"(\\)+'", r"\'", code)
+        # # p.write(code + '\n')
+
+
+
+        # replace escaped double quotes
+        code = code.replace('\\"', '\"')
+
+        # encode newline repr
+        code = code.replace('\\\\n', '3mS7BvdYa5D6lV~{u2')
+
+        # replace newline
+        code = code.replace('\\n', '\n')
+
+        # replace tabs
+        code = code.replace('\\t', '\t')
+
+        # decode newline repr
+        code = code.replace('3mS7BvdYa5D6lV~{u2', '\\n')
+
+
+
+
+        p.write("CODE AFTER\n")
+        p.write(code + '\n')
+        p.write('\n')
+
+        p.close()
+
+
 
         # create path to downloads folder
         downloads_folder = ('/Users/matthewbeiswenger/Downloads')
