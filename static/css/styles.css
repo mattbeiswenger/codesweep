@@ -5,6 +5,7 @@
     border-radius: 4px 4px 0 0;
 }
 
-#error-card-body {
-    white-space: pre-line
+#console {
+    white-space: pre-line;
+    color: black;
 }
