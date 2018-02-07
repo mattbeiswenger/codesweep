@@ -31,7 +31,7 @@
             </div>
           </div>
       </nav>
-      <div class="container mt-5 mb-5">
+      <div class="container-fluid mt-5 mb-5 pl-5 pr-5">
           <div class="row justify-content-between">
               <div class="col col-lg-8 mb-5">
                   <h1 class="display-4 mb-4">{{ assignment.title }}</h1>
@@ -41,21 +41,25 @@
                   {% if assignment.instructions_file %}
                   <p>Attachments:</p>
                   <a class="btn btn-info mb-5" href="/media/{{ assignment.instructions_file}}">Instructions</a>
-
                   {% endif %}
-                  <div id="editor" class="ace-dawn mx-auto mb-0"></div>
-                  <div id="editor-footer" class="mb-4 container">
-                      <button id="submit-button" class="btn btn-info mt-3">Run Code</button>
-                      <button class="btn btn-info mt-3 float-right" id="fullscreen-button"><img src="../../static/images/glyphicons-350-fullscreen.png" /></button>
-                  </div>
-                  <div>
+              </div>
+          </div>
+          <div class="row justify-content-start">
+              <div class="col-6  mb-5">
+                  <div id="editor" class="ace-dawn"></div>
+                  <button id="submit-button" class="btn btn-info mt-3">Run Code</button>
+              </div>
+              <div class="col-6">
+                  <div class="card d-none" id="error-card">
+                      <div class="card-header bg-danger">
+                          Error
+                      </div>
+                      <div class="card-body" id="error-card-body">
 
+                      </div>
                   </div>
               </div>
           </div>
-
-
-
       </div>
 
 
@@ -70,9 +74,6 @@
     <!-- Bootstrap JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
 
-
-    <!-- PDF.js -->
-    <script type="text/javascript" src="../../static/scripts/pdf.js-1.9.426-dist/build/pdf.js" charset="utf-8"></script>
     <!-- Ace -->
     <script type="text/javascript" src="../../static/scripts/ace/ace.js" charset="utf-8"></script>
     <script>
@@ -99,8 +100,20 @@
                         "code_text": JSON.stringify(text),
                         "assignment_title": "{{ assignment.title }}",
                         "user": "{{ request.user.username }}",
-                        "csrfmiddlewaretoken": "{{ csrf_token }}"
+                        "csrfmiddlewaretoken": "{{ csrf_token }}",
                     },
+                    success: function(data){
+                        if (data.error) {
+                            $('#error-card').removeClass("d-none")
+                            alert(data.error)
+                            $('#error-card-body').text(data.error)
+                            // alert(data.error);
+                        }
+                        else {
+                            $('#error-card').addClass("d-none")
+                        }
+
+                    }
                 });
             });
 
@@ -109,104 +122,6 @@
                 $('#editor').css("width","1000px");;
             })
         });
-
-        // -------- PDF.js ----------- //
-
-
-
-
-        // // The workerSrc property shall be specified.
-        // PDFJS.workerSrc = '{{ assignment.instructions_file}}';
-        //
-        // var pdfDoc = null,
-        //     pageNum = 1,
-        //     pageRendering = false,
-        //     pageNumPending = null,
-        //     scale = 0.8,
-        //     canvas = document.getElementById('the-canvas'),
-        //     ctx = canvas.getContext('2d');
-        //
-        // /**
-        //  * Get page info from document, resize canvas accordingly, and render page.
-        //  * @param num Page number.
-        //  */
-        // function renderPage(num) {
-        //   pageRendering = true;
-        //   // Using promise to fetch the page
-        //   pdfDoc.getPage(num).then(function(page) {
-        //     var viewport = page.getViewport(scale);
-        //     canvas.height = viewport.height;
-        //     canvas.width = viewport.width;
-        //
-        //     // Render PDF page into canvas context
-        //     var renderContext = {
-        //       canvasContext: ctx,
-        //       viewport: viewport
-        //     };
-        //     var renderTask = page.render(renderContext);
-        //
-        //     // Wait for rendering to finish
-        //     renderTask.promise.then(function() {
-        //       pageRendering = false;
-        //       if (pageNumPending !== null) {
-        //         // New page rendering is pending
-        //         renderPage(pageNumPending);
-        //         pageNumPending = null;
-        //       }
-        //     });
-        //   });
-        //
-        //   // Update page counters
-        //   document.getElementById('page_num').textContent = num;
-        // }
-        //
-        // /**
-        //  * If another page rendering in progress, waits until the rendering is
-        //  * finised. Otherwise, executes rendering immediately.
-        //  */
-        // function queueRenderPage(num) {
-        //   if (pageRendering) {
-        //     pageNumPending = num;
-        //   } else {
-        //     renderPage(num);
-        //   }
-        // }
-        //
-        // /**
-        //  * Displays previous page.
-        //  */
-        // function onPrevPage() {
-        //   if (pageNum <= 1) {
-        //     return;
-        //   }
-        //   pageNum--;
-        //   queueRenderPage(pageNum);
-        // }
-        // document.getElementById('prev').addEventListener('click', onPrevPage);
-        //
-        // /**
-        //  * Displays next page.
-        //  */
-        // function onNextPage() {
-        //   if (pageNum >= pdfDoc.numPages) {
-        //     return;
-        //   }
-        //   pageNum++;
-        //   queueRenderPage(pageNum);
-        // }
-        // document.getElementById('next').addEventListener('click', onNextPage);
-        //
-        // /**
-        //  * Asynchronously downloads PDF.
-        //  */
-        // PDFJS.getDocument(url).then(function(pdfDoc_) {
-        //   pdfDoc = pdfDoc_;
-        //   document.getElementById('page_count').textContent = pdfDoc.numPages;
-        //
-        //   // Initial/first page rendering
-        //   renderPage(pageNum);
-        // });
-
 
 
     </script>

@@ -7,7 +7,7 @@ from mainapp.models import Assignment
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.http import require_http_methods
 from django.http import Http404, HttpResponseNotFound, HttpResponseRedirect
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, JsonResponse
 
 # modules for code submission
 import os
@@ -123,10 +123,17 @@ def submit_text(request):
         os.system('python3 ' + filename + ' input.txt ' + \
         filename + '_outputs.txt 2> error.txt')
 
-        # with open('error.txt', 'r') as error_file:
+        with open('error.txt', 'r') as error_file:
+            errorfile = error_file.read()
 
+        sys.stderr.write(repr(errorfile) + '\n')
+        errorfile = str(errorfile)
 
-        return HttpResponse("hello")
+        data = {
+            'error': errorfile
+        }
+
+        return JsonResponse(data)
 
     else:
 
