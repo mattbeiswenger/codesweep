@@ -81,14 +81,15 @@ def submit_text(request):
         f = open(code_path, 'w')
         i = open(input_path, 'w')
 
-        # import sys at top of file
-        f.write("import sys")
-        f.write("\n\n")
 
         # write users code to the file
         f.write(code)
 
         function = Assignment.objects.get(title="Homework 1").function_name
+
+        # import sys at top of file
+        f.write("\n\n")
+        f.write("import sys")
 
         # create sys Main() function
         f.write("\n\n")
@@ -123,12 +124,13 @@ def submit_text(request):
         os.system('python3 ' + filename + ' input.txt ' + \
         filename + '_outputs.txt 2> error.txt')
 
+        # read the error file
         with open('error.txt', 'r') as error_file:
-            errorfile = error_file.read()
+            errorfile = error_file.readlines()[5:]
+        errorfile = "".join(errorfile)
+        sys.stderr.write(repr(errorfile))
 
-        sys.stderr.write(repr(errorfile) + '\n')
-        errorfile = str(errorfile)
-
+        # create JSON data response
         data = {
             'error': errorfile
         }
