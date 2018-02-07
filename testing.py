@@ -1,9 +1,6 @@
-import re
+import subprocess
 
-code = 'def fib(num):\\n\\t#insert code here\\n\\tnumbers = [1, 2, 3]\\n\\tfor n in numbers:\\n\\tprint(n + \\"\\\\n\\")'
+process = subprocess.Popen(['ls'], stdout=subprocess.PIPE)
+result = process.communicate()[0]
 
-
-# code = code.replace("\\n", "\n")
-code = re.sub(r'(\\)+n'), '\n', code)
-
-print(code)
+print(result)

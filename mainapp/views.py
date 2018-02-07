@@ -1,20 +1,20 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
-from django.views.decorators.http import (require_POST, require_GET,
-                                        require_http_methods)
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from mainapp.models import Assignment
-from django.http import (Http404, HttpResponseNotFound, HttpResponseRedirect,
-                        HttpResponse, HttpRequest)
+from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.http import require_http_methods
+from django.http import Http404, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse, HttpRequest
 
 # modules for code submission
 import os
 import re
 import datetime
-import subprocess
-
+from subprocess import Popen, PIPE
+import shlex
 
 # for debugging
 import sys
@@ -115,13 +115,18 @@ def submit_text(request):
                 i.write(item + '\n')
         i.close()
 
-
         # execute the code
         os.chdir(downloads_folder)
-        os.system('python3 ' + filename + ' input.txt ' + \
-            filename + '_outputs.txt')
 
-        return HttpResponse("Code has executed")
+        # take in file input
+        # create file output and error file
+        os.system('python3 ' + filename + ' input.txt ' + \
+        filename + '_outputs.txt 2> error.txt')
+
+        # with open('error.txt', 'r') as error_file:
+
+
+        return HttpResponse("hello")
 
     else:
 
