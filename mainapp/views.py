@@ -62,10 +62,12 @@ def submit_text(request):
 
         # date and time of submission
         currentDT = datetime.datetime.now()
-        currentDT = currentDT.strftime("%Y-%m-%d_%H:%M:%S")
+        currentDT = currentDT.strftime("%Y-%m-%d--%H-%M-%S")
 
-        # create unique filename
-        filename = "{}_{}_{}.py".format(user, assignment_title, currentDT)
+        # create unique filenames for code file and output file
+        python_code_file = "{}--{}--{}.py".format(user, assignment_title, currentDT)
+        code_output_file = python_code_file + "--outputs"
+
 
         # un-escape backslash-escaped string
         code = bytes(code, "utf-8").decode("unicode_escape")
@@ -74,7 +76,7 @@ def submit_text(request):
         downloads_folder = ('/Users/matthewbeiswenger/Downloads')
 
         # create paths to individual files
-        code_path = os.path.join(downloads_folder, filename)
+        code_path = os.path.join(downloads_folder, python_code_file)
         input_path = os.path.join(downloads_folder, 'input.txt')
 
         # open files
@@ -121,18 +123,24 @@ def submit_text(request):
 
         # take in file input
         # create file output and error file
-        os.system('python3 ' + filename + ' input.txt ' + \
-        filename + '_outputs.txt 2> error.txt')
+        os.system('python3 ' + python_code_file + ' input.txt ' + \
+        code_output_file + ' 2> error.txt')
 
         # read the error file
         with open('error.txt', 'r') as error_file:
             errorfile = error_file.readlines()[5:]
         errorfile = "".join(errorfile)
-        sys.stderr.write(repr(errorfile))
+
+        sys.stderr.write(repr(errorfile + '\n'))
+
+        with open(code_output_file, 'r') as output_file:
+            outputfile = output_file.read()
+
 
         # create JSON data response
         data = {
-            'error': errorfile
+            'error': errorfile,
+            'output': outputfile
         }
 
         return JsonResponse(data)

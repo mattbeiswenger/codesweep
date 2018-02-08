@@ -7,5 +7,9 @@
 
 #console {
     white-space: pre-line;
-    color: black;
+    color: red;
+}
+
+#outputs {
+    white-space: pre-line;
 }

@@ -54,10 +54,10 @@
                       <div class="card-header">
                           <ul class="nav nav-tabs card-header-tabs">
                               <li class="nav-item">
-                                  <a class="nav-link active" href="#console" data-toggle="tab">Console</a>
+                                  <a class="nav-link active" href="#console" data-toggle="tab" id="console-tab">Runtime Errors</a>
                               </li>
                               <li class="nav-item">
-                                  <a class="nav-link" href="#outputs" data-toggle="tab">Outputs</a>
+                                  <a class="nav-link" href="#outputs" data-toggle="tab" id="outputs-tab">Outputs</a>
                               </li>
                               <li class="nav-item">
                                   <a class="nav-link" href="#other" data-toggle="tab">Other</a>
@@ -67,7 +67,7 @@
                       <div class="card-body">
                           <div class="tab-content">
                               <div class="tab-pane active in" id="console"></div>
-                              <div class="tab-pane fade" id="outputs">Outputs go here</div>
+                              <div class="tab-pane fade" id="outputs"></div>
                               <div class="tab-pane fade" id="other">Something else can go here</div>
                         </div>
                       </div>
@@ -116,16 +116,37 @@
                         "user": "{{ request.user.username }}",
                         "csrfmiddlewaretoken": "{{ csrf_token }}",
                     },
-                    // retrieve data
+
+                    // retrieve data and write to tab bodies
                     success: function(data){
+                        // write errors to error tab
                         if (data.error) {
-                            $('#console').text(data.error)
-                            $("#console").css("color","red");
+                            $('#console').text(data.error);
+                            // trigger click to go to tab
+                            $('#console-tab').trigger('click');
+                            // if it's there, remove muted text and add
+                            // red text
+                            $('#console').removeClass("text-muted");
+                            $('#console').addClass("text-danger");
+
                         }
                         else {
-                            $('#console').text("")
+                            $('#console').text("There were no runtime errors");
+                            // if it's there, remove red text and add
+                            // muted text
+                            $('#console').removeClass("text-danger");
+                            $('#console').addClass("text-muted");
                         }
 
+                        // write outputs to output tab
+                        if (data.output) {
+                            $('#outputs').text(data.output);
+                            // trigger click to go to tab
+                            $('#outputs-tab').trigger('click');
+                        }
+                        else {
+                            $('#outputs').text("");
+                        }
                     }
                 });
             });
