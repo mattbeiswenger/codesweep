@@ -66,7 +66,7 @@ def submit_text(request):
 
         # create unique filenames for code file and output file
         python_code_file = "{}--{}--{}.py".format(user, assignment_title, currentDT)
-        code_output_file = python_code_file + "--outputs"
+        code_output_file = "{}--{}--{}--outputs.py".format(user, assignment_title, currentDT)
 
 
         # un-escape backslash-escaped string
@@ -77,11 +77,13 @@ def submit_text(request):
 
         # create paths to individual files
         code_path = os.path.join(downloads_folder, python_code_file)
-        input_path = os.path.join(downloads_folder, 'input.txt')
+        input_path = os.path.join(downloads_folder, 'inputs.txt')
+        expected_outputs_path = os.path.join(downloads_folder, 'expected--outputs.txt')
 
         # open files
         f = open(code_path, 'w')
         i = open(input_path, 'w')
+        e = open(input_path, 'w')
 
 
         # write users code to the file
@@ -110,6 +112,7 @@ def submit_text(request):
         # retrieve the inputs from the assignment object with
         # the correlating assignment title
         inputs = Assignment.objects.get(title="Homework 1").inputs
+        expected_outputs = Assignment.objects.get(title="Homework 1").outputs
 
         # write inputs to file
         i = open(input_path, 'w')
@@ -118,20 +121,25 @@ def submit_text(request):
                 i.write(item + '\n')
         i.close()
 
+        # write expected outputs to file
+        e = open(expected_outputs_path, 'w')
+        for item in expected_outputs:
+            if item != "," and item != " ":
+                e.write(item + '\n')
+        e.close()
+
         # execute the code
         os.chdir(downloads_folder)
 
         # take in file input
         # create file output and error file
-        os.system('python3 ' + python_code_file + ' input.txt ' + \
+        os.system('python3 ' + python_code_file + ' inputs.txt ' + \
         code_output_file + ' 2> error.txt')
 
         # read the error file
         with open('error.txt', 'r') as error_file:
             errorfile = error_file.readlines()[5:]
         errorfile = "".join(errorfile)
-
-        sys.stderr.write(repr(errorfile + '\n'))
 
         with open(code_output_file, 'r') as output_file:
             outputfile = output_file.read()
