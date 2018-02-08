@@ -11,10 +11,7 @@ from django.http import HttpResponse, HttpRequest, JsonResponse
 
 # modules for code submission
 import os
-import re
 import datetime
-from subprocess import Popen, PIPE
-import shlex
 
 # for debugging
 import sys
@@ -45,31 +42,39 @@ def submit_text(request):
 
     if request.method == 'POST':
 
-        # retrieve data
-        data = request.POST
 
-        # create string for submitted code
-        code = data['code_text']
-        # remove beginning and end quotes
-        code = code[1:-1]
+        data = request.POST # retrieve data
 
-        # create string for title
-        assignment_title = data['assignment_title']
+        code = data['code_text'] # obtain submitted code
+        code = code[1:-1] # remove beginning and end quotes
+
+
+        assignment_title = data['assignment_title'] # obtain assignment title
+
+        # retrieve data about this homework assignment from the db
+        function = Assignment.objects.get(title=assignment_title).function_name
+        inputs = Assignment.objects.get(title=assignment_title).inputs
+        expected_outputs = Assignment.objects.get(title=assignment_title).outputs
+
         # replace spaces with underscores
+        # so the title can be used in a filename
         assignment_title = assignment_title.replace(" ", "+")
 
-        user = data['user']
 
-        # date and time of submission
+        user = data['user'] # obtain the user submitting the code
+
+        # date and time of submission, to be used in filename
         currentDT = datetime.datetime.now()
         currentDT = currentDT.strftime("%Y-%m-%d--%H-%M-%S")
 
         # create unique filenames for code file and output file
-        python_code_file = "{}--{}--{}.py".format(user, assignment_title, currentDT)
-        code_output_file = "{}--{}--{}--outputs.py".format(user, assignment_title, currentDT)
+        python_code_file = "{}--{}--{}.py".format(
+                                user, assignment_title, currentDT)
+        code_output_file = "{}--{}--{}--outputs.txt".format(
+                                user, assignment_title, currentDT)
 
 
-        # un-escape backslash-escaped string
+        # un-escape backslash-escaped code string
         code = bytes(code, "utf-8").decode("unicode_escape")
 
         # create path to downloads folder
@@ -77,72 +82,62 @@ def submit_text(request):
 
         # create paths to individual files
         code_path = os.path.join(downloads_folder, python_code_file)
-        input_path = os.path.join(downloads_folder, 'inputs.txt')
+        inputs_path = os.path.join(downloads_folder, 'inputs.txt')
         expected_outputs_path = os.path.join(downloads_folder, 'expected--outputs.txt')
 
-        # open files
-        f = open(code_path, 'w')
-        i = open(input_path, 'w')
-        e = open(input_path, 'w')
+        # create user's code file
+        with open(code_path, 'w') as code_file:
+                # write users code to the file
+                code_file.write(code)
 
+                # import sys under user-submitted code
+                code_file.write("\n\n")
+                code_file.write("import sys")
 
-        # write users code to the file
-        f.write(code)
+                # create sys Main() function
+                code_file.write("\n\n")
+                code_file.write("def Main():\n\t")
+                code_file.write("with open(sys.argv[1], 'r') as input, " + \
+                    "open(sys.argv[2], 'w') as output:\n\t\t")
+                code_file.write("for line in input:\n\t\t\t")
+                code_file.write("output.write(str(" + function + \
+                                "(int(line))) + '\\n')")
+                code_file.write("\n\n")
 
-        function = Assignment.objects.get(title="Homework 1").function_name
+                # create if __name__ == '__main__'
+                code_file.write("if __name__ == '__main__':\n\tMain()")
 
-        # import sys at top of file
-        f.write("\n\n")
-        f.write("import sys")
+        # create inputs file
+        with open(inputs_path, 'w') as inputs_file:
+            for item in inputs:
+                if item != "," and item != " ":
+                    inputs_file.write(item + '\n')
 
-        # create sys Main() function
-        f.write("\n\n")
-        f.write("def Main():\n\t")
-        f.write("with open(sys.argv[1], 'r') as input, " + \
-            "open(sys.argv[2], 'w') as output:\n\t\t")
-        f.write("for line in input:\n\t\t\t")
-        f.write("output.write(str(" + function + "(int(line))) + '\\n')")
-        f.write("\n\n")
+        # create expected outputs file
+        with open(expected_outputs_path, 'w') as expected_outputs_file:
+            for item in expected_outputs:
+                if item != "," and item != " ":
+                    expected_outputs_file.write(item + '\n')
 
-        # create if __name__ == '__main__'
-        f.write("if __name__ == '__main__':\n\tMain()")
-
-        f.close()
-
-        # retrieve the inputs from the assignment object with
-        # the correlating assignment title
-        inputs = Assignment.objects.get(title="Homework 1").inputs
-        expected_outputs = Assignment.objects.get(title="Homework 1").outputs
-
-        # write inputs to file
-        i = open(input_path, 'w')
-        for item in inputs:
-            if item != "," and item != " ":
-                i.write(item + '\n')
-        i.close()
-
-        # write expected outputs to file
-        e = open(expected_outputs_path, 'w')
-        for item in expected_outputs:
-            if item != "," and item != " ":
-                e.write(item + '\n')
-        e.close()
 
         # execute the code
         os.chdir(downloads_folder)
 
         # take in file input
-        # create file output and error file
+        # create outputs file and error file
         os.system('python3 ' + python_code_file + ' inputs.txt ' + \
         code_output_file + ' 2> error.txt')
 
         # read the error file
         with open('error.txt', 'r') as error_file:
+            # skip the lines relating to traceback to Main()
             errorfile = error_file.readlines()[5:]
         errorfile = "".join(errorfile)
 
+        # read the outputs file
         with open(code_output_file, 'r') as output_file:
             outputfile = output_file.read()
+
 
 
         # create JSON data response
@@ -154,7 +149,6 @@ def submit_text(request):
         return JsonResponse(data)
 
     else:
-
         raise Http404()
 
 
