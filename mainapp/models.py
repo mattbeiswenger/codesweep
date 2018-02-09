@@ -11,7 +11,7 @@ class Assignment(models.Model):
     time_due = models.TimeField(blank=True)
     inputs = models.TextField()
     outputs = models.TextField()
-    function_name = models.CharField(max_length=128)
+    function_definition = models.CharField(max_length=128)
     slug = models.SlugField(unique=True)
     instructions_file = models.FileField(blank=True, null=True,
         upload_to='instruction_files/%Y/%m/%d')

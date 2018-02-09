@@ -12,6 +12,7 @@ from django.http import HttpResponse, HttpRequest, JsonResponse
 # modules for code submission
 import os
 import datetime
+import re
 
 # for debugging
 import sys
@@ -46,22 +47,23 @@ def submit_text(request):
         data = request.POST # retrieve data
 
         code = data['code_text'] # obtain submitted code
-        code = code[1:-1] # remove beginning and end quotes
-
-
+        user = data['user'] # obtain the user submitting the code
         assignment_title = data['assignment_title'] # obtain assignment title
 
+        code = code[1:-1] # remove beginning and end quotes
+
         # retrieve data about this homework assignment from the db
-        function = Assignment.objects.get(title=assignment_title).function_name
+        function = Assignment.objects.get(title=assignment_title).function_definition
         inputs = Assignment.objects.get(title=assignment_title).inputs
         expected_outputs = Assignment.objects.get(title=assignment_title).outputs
+
 
         # replace spaces with underscores
         # so the title can be used in a filename
         assignment_title = assignment_title.replace(" ", "+")
 
 
-        user = data['user'] # obtain the user submitting the code
+
 
         # date and time of submission, to be used in filename
         currentDT = datetime.datetime.now()
@@ -139,6 +141,33 @@ def submit_text(request):
             outputfile = output_file.read()
 
 
+        # --------- calculate code/comment ratio ------------- #
+
+        # sum of comments
+        # capture any characters between # and \n
+        comments = re.findall(r"#.*\n|#.*", code)
+        comments = str(comments)
+        # remove erroneous characters
+        comments = comments.replace("[", "")
+        comments = comments.replace("]", "")
+        comments = comments.replace("\\n", "")
+        comments = comments.replace("", "")
+        comments = comments.replace(",", "")
+        comments = comments.replace("'", "")
+        # sum characters in comment string
+        comment_sum = 0
+        for item in comments:
+            comment_sum += 1
+
+        # sum of code
+        code = code.replace("\n", "")
+        code = code.replace("\t", "")
+        code_sum = 0
+        for item in code:
+            code_sum += 1
+
+        # comment/code ratio in percentage form
+        comment_code_ratio = "{0:.0f}%".format(comment_sum/code_sum * 100)
 
         # create JSON data response
         data = {

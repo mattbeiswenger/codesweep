@@ -14,7 +14,7 @@
 
 
 
-    <title>CodeSweep</title>
+    <title>CodeSweep | {{ assignment.title }}</title>
   </head>
   <body>
       <nav class="bg-info navbar navbar-expand-lg navbar-light justify-content-end">
@@ -57,10 +57,10 @@
                                   <a class="nav-link active" href="#console" data-toggle="tab" id="console-tab">Runtime Errors</a>
                               </li>
                               <li class="nav-item">
-                                  <a class="nav-link" href="#outputs" data-toggle="tab" id="outputs-tab">Outputs</a>
+                                  <a class="nav-link" href="#outputs" data-toggle="tab" id="outputs-tab">Results</a>
                               </li>
                               <li class="nav-item">
-                                  <a class="nav-link" href="#other" data-toggle="tab">Other</a>
+                                  <a class="nav-link" href="#other" data-toggle="tab">Comments</a>
                               </li>
                           </ul>
                       </div>
@@ -96,7 +96,7 @@
         var editor = ace.edit("editor");
         editor.setTheme("ace/theme/monokai");
         editor.getSession().setMode("ace/mode/python");
-        editor.setValue("def {{ assignment.function_name }}(num):\n\t#insert code here\n\t")
+        editor.setValue("def {{ assignment.function_definition }}(num):\n\t#insert code here\n\t")
         editor.gotoLine(3);
         editor.getSession().setTabSize(4);
 
