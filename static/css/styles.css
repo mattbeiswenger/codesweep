@@ -8,8 +8,24 @@
 #console {
     white-space: pre-line;
     color: red;
+    position: relative;
 }
 
 #outputs {
     white-space: pre-line;
+}
+
+#comment_progress {
+    transform: rotate(-90deg);
+    display: block;
+    margin: 0 auto;
+}
+
+#comment_percentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+
+
 }

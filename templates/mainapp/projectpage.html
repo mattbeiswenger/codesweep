@@ -60,7 +60,7 @@
                                   <a class="nav-link" href="#outputs" data-toggle="tab" id="outputs-tab">Results</a>
                               </li>
                               <li class="nav-item">
-                                  <a class="nav-link" href="#other" data-toggle="tab">Comments</a>
+                                  <a class="nav-link" href="#comments" data-toggle="tab">Comments</a>
                               </li>
                           </ul>
                       </div>
@@ -68,7 +68,17 @@
                           <div class="tab-content">
                               <div class="tab-pane active in" id="console"></div>
                               <div class="tab-pane fade" id="outputs"></div>
-                              <div class="tab-pane fade" id="other">Something else can go here</div>
+                              <div class="tab-pane fade" id="comments">
+                                  <svg id="comment_progress" width="120" height="120" viewBox="0 0 120 120">
+                                       <!-- grey circle -->
+                                       <circle id="outline_circle" cx="60" cy="60" r="54" fill="none" stroke="#e6e6e6" stroke-width="12" />
+                                       <!-- orange circle -->
+                                       <circle id="progress_circle" cx="60" cy="60" r="54" fill="none" stroke="#f77a52" stroke-linecap="round" stroke-width="12" stroke-dasharray="339.292" stroke-dashoffset="339.292"/>
+                                   </svg>
+                                   <div id="comment_percentage">
+                                       25%
+                                   </div>
+                           </div>
                         </div>
                       </div>
                   </div>
@@ -147,10 +157,23 @@
                         else {
                             $('#outputs').text("");
                         }
+
+                        if (data.comment_ratio) {
+                            var comment_percentage = data.comment_ratio;
+                            var stroke_ratio = comment_percentage
+                            stroke_ratio = stroke_ratio.substring(0, stroke_ratio.length - 1);
+                            stroke_ratio = parseInt(stroke_ratio);
+                            stroke_ratio = stroke_ratio/100;
+                            stroke_ratio = 339.292 * (1 - stroke_ratio);
+                            alert(stroke_ratio)
+                            $('#progress_circle').attr("stroke-dashoffset", stroke_ratio);
+                        }
                     }
                 });
             });
         });
+
+
 
         // drag and drop files
         var dropzone = document.getElementById('editor')
@@ -175,6 +198,11 @@
             }
             reader.readAsText(file)
         }
+
+        var ProgressBar = require('progressbar.js')
+        var ProgressBar = new ProgressBar.Circle('#comments', {
+            strokeWidth: 2
+        });
 
 
     </script>

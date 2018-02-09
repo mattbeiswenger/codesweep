@@ -172,7 +172,8 @@ def submit_text(request):
         # create JSON data response
         data = {
             'error': errorfile,
-            'output': outputfile
+            'output': outputfile,
+            'comment_ratio': comment_code_ratio
         }
 
         return JsonResponse(data)
