@@ -32,19 +32,24 @@
           </div>
       </nav>
       <div class="container-fluid mt-5 mb-5">
-          <div class="row justify-content-between">
-              <div class="col col-lg-8 mb-5">
+          <div class="row justify-content-start">
+              <div class="col col-lg-6 mb-5 offset-md-1">
                   <h1 class="display-4 mb-4">{{ assignment.title }}</h1>
                   {% if assignment.description %}
                   <p class="lead mb-4">{{ assignment.description }}</p>
                   {% endif %}
-                  {% if assignment.instructions_file %}
-                  <p>Attachments:</p>
-                  <a class="btn btn-info mb-5" href="/media/{{ assignment.instructions_file}}">Instructions</a>
-                  {% endif %}
+              </div>
+              <div class="col-3 offset-md-1">
+                  <div class="list-group">
+                      <li class="list-group-item">
+                          Attachments
+                      </li>
+                      <a href="/media/{{ assignment.instructions_file }}" class="list-group-item list-group-item-action">Title</a>
+                      <a href="#" class="list-group-item list-group-item-action">Title</a>
+                  </div>
               </div>
           </div>
-          <div class="row justify-content-start">
+          <div class="row justify-content-center">
               <div class="col-7  mb-5">
                   <div id="editor" class="ace-dawn"></div>
                   <button id="submit-button" class="btn btn-info mt-3">Run Code</button>
