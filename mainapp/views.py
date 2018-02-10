@@ -166,8 +166,10 @@ def submit_text(request):
         for item in code:
             code_sum += 1
 
-        # comment/code ratio in percentage form
-        comment_code_ratio = "{0:.0f}%".format(comment_sum/code_sum * 100)
+        comment_code_ratio = comment_sum/code_sum
+        
+
+        # ----------------------------------------------------- #
 
         # create JSON data response
         data = {

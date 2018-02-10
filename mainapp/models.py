@@ -12,6 +12,10 @@ class Assignment(models.Model):
     inputs = models.TextField()
     outputs = models.TextField()
     function_definition = models.CharField(max_length=128)
+    comment_to_code_ratio = models.IntegerField(default=0, blank=True,
+                    help_text="This number represents the percentage of \
+                    characters that are within comments, compared to the \
+                    entire body of code")
     slug = models.SlugField(unique=True)
     instructions_file = models.FileField(blank=True, null=True,
         upload_to='instruction_files/%Y/%m/%d')
