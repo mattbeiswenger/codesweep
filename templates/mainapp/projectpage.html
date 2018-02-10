@@ -33,8 +33,12 @@
       </nav>
       <div class="container-fluid mt-5 mb-5">
           <div class="row justify-content-start">
-              <div class="col col-lg-6 mb-5 offset-md-1">
-                  <h1 class="display-4 mb-4">{{ assignment.title }}</h1>
+              <div class="col col-lg-6 offset-md-1">
+                  <h1 class="display-4">{{ assignment.title }}</h1>
+              </div>
+          </div>
+          <div class="row justify-content-center mb-4">
+              <div class="col-lg-6">
                   {% if assignment.description %}
                   <p class="lead mb-4">{{ assignment.description }}</p>
                   {% endif %}
