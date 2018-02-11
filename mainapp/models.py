@@ -2,6 +2,13 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
+class InstructionFile(models.Model):
+    title = models.CharField(max_length=100)
+    file = models.FileField(blank=True, null=True,
+        upload_to='instruction_files/%Y/%m/%d')
+
+    def __str__(self):
+        return self.title
 
 class Assignment(models.Model):
     title = models.CharField(max_length=128, unique=True)
@@ -17,8 +24,9 @@ class Assignment(models.Model):
                     characters that are within comments, compared to the \
                     entire body of code")
     slug = models.SlugField(unique=True)
-    instructions_file = models.FileField(blank=True, null=True,
-        upload_to='instruction_files/%Y/%m/%d')
+    instruction_file = models.ManyToManyField(InstructionFile, blank=True)
+
+
 
     # slug feature
     def save(self, *args, **kwargs):

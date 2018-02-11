@@ -1,5 +1,5 @@
 from django.contrib import admin
-from mainapp.models import Assignment, UserProfile
+from mainapp.models import Assignment, UserProfile, InstructionFile
 
 # Register your models here.
 
@@ -8,3 +8,4 @@ class AssignmentAdmin(admin.ModelAdmin):
 
 admin.site.register(Assignment, AssignmentAdmin)
 admin.site.register(UserProfile)
+admin.site.register(InstructionFile)

@@ -44,14 +44,18 @@
                   {% endif %}
               </div>
               <div class="col-3 offset-md-1">
+                  {% if assignment.instruction_file.all %}
                   <div class="list-group">
-                      <li class="list-group-item">
+                      <li class="list-group-item active bg-info border-info">
                           Attachments
                       </li>
-                      <a href="/media/{{ assignment.instructions_file }}" class="list-group-item list-group-item-action">Title</a>
-                      <a href="#" class="list-group-item list-group-item-action">Title</a>
+                      {% for ifile in assignment.instruction_file.all %}
+                      <a href="/media/{{ ifile.file }}" class="list-group-item list-group-item-action">{{ ifile.title }}</a>
+                      {% endfor %}
                   </div>
+                  {% endif %}
               </div>
+
           </div>
           <div class="row justify-content-center">
               <div class="col-7  mb-5">
