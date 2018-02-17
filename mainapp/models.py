@@ -41,3 +41,17 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class Submission(models.Model):
+    assignment = models.ForeignKey(Assignment)
+    file = models.FileField(blank=True, null=True,
+         upload_to='submitted_files/')
+    date_submitted = models.DateField(blank=True)
+    time_submitted = models.TimeField(blank=True)
+    user = models.OneToOneField(User)
+    correct = models.BooleanField(default=False)
+    comment_ratio = models.IntegerField()
+
+    def __str__(self):
+        return self.file

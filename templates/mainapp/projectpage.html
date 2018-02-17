@@ -59,7 +59,9 @@
           </div>
           <div class="row justify-content-center">
               <div class="col-7  mb-5">
-                  <div id="editor" class="ace-dawn"></div>
+                  <div>
+                      <div id="editor" class="ace-dawn"></div>
+                  </div>
                   <button id="submit-button" class="btn btn-info mt-3">Run Code</button>
               </div>
               <div class="col-4">
@@ -164,15 +166,15 @@
                             $('#console').addClass("text-muted");
                         }
 
-                        // write outputs to output tab
-                        if (data.output) {
-                            $('#outputs').text(data.output);
-                            // trigger click to go to tab
-                            $('#outputs-tab').trigger('click');
-                        }
-                        else {
-                            $('#outputs').text("");
-                        }
+                        // // write outputs to output tab
+                        // if (data.output) {
+                        //     $('#outputs').text(data.output);
+                        //     // trigger click to go to tab
+                        //     $('#outputs-tab').trigger('click');
+                        // }
+                        // else {
+                        //     $('#outputs').text("");
+                        // }
 
                         if (data.comment_ratio) {
                             var comment_percentage = data.comment_ratio;
@@ -187,6 +189,14 @@
                             $('#comment_percentage').text((comment_percentage*100) + '%');
                             stroke_ratio = 590.6194189 * (1 - comment_percentage);
                             $('#progress_circle').attr("stroke-dashoffset", stroke_ratio);
+                        }
+
+                        if (data.diff_results) {
+                            $('#outputs').text("incorrect");
+                            $('#outputs-tab').trigger('click');
+                        }
+                        else {
+                            $('#outputs').text("correct");
                         }
                     }
                 });

@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from mainapp.models import Assignment
+from mainapp.models import Assignment, Submission
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.http import require_http_methods
 from django.http import Http404, HttpResponseNotFound, HttpResponseRedirect
@@ -121,14 +121,16 @@ def submit_text(request):
                 if item != "," and item != " ":
                     expected_outputs_file.write(item + '\n')
 
-
-        # execute the code
+        # change directory
         os.chdir(downloads_folder)
 
         # take in file input
         # create outputs file and error file
         os.system('python3 ' + python_code_file + ' inputs.txt ' + \
         code_output_file + ' 2> error.txt')
+
+        os.system('diff -q ' + code_output_file + ' expected--outputs.txt > \
+                    diff-results.txt')
 
         # read the error file
         with open('error.txt', 'r') as error_file:
@@ -139,6 +141,10 @@ def submit_text(request):
         # read the outputs file
         with open(code_output_file, 'r') as output_file:
             outputfile = output_file.read()
+
+        # read the outputs file
+        with open('diff-results.txt', 'r') as diff_file:
+            diff_results = diff_file.read()
 
 
         # --------- calculate code/comment ratio ------------- #
@@ -151,7 +157,7 @@ def submit_text(request):
         comments = comments.replace("[", "")
         comments = comments.replace("]", "")
         comments = comments.replace("\\n", "")
-        comments = comments.replace("", "")
+        comments = comments.replace(" ", "")
         comments = comments.replace(",", "")
         comments = comments.replace("'", "")
         # sum characters in comment string
@@ -167,15 +173,44 @@ def submit_text(request):
             code_sum += 1
 
         comment_code_ratio = comment_sum/code_sum
-        
+
 
         # ----------------------------------------------------- #
+        # assignment = models.ForeignKey(Assignment)
+        # file = models.FileField(blank=True, null=True,
+        #      upload_to='submitted_files/')
+        # date_submitted = models.DateField(blank=True)
+        # time_submitted = models.TimeField(blank=True)
+        # user = models.ForeignKey(UserProfile, editable=False)
+        # correct = models.BooleanField(default=False)
+        # comment_ratio = models.IntegerField()
+        correct = False
+        if (diff_results):
+            correct = True
+
+        current_user = User.objects.get(username=user)
+        assignment_title = assignment_title.replace("+", " ")
+        current_assignment = Assignment.objects.get(title=assignment_title)
+
+
+        # create submission record
+        submission = Submission()
+        submission.user = current_user
+        submission.assignment = current_assignment
+        submission.file = code_file
+        submission.date_submitted = datetime.datetime.now()
+        submission.time_submitted = datetime.datetime.now()
+        submission.correct = correct
+        submission.comment_ratio = comment_code_ratio
+        submission.save()
+
 
         # create JSON data response
         data = {
             'error': errorfile,
             'output': outputfile,
-            'comment_ratio': comment_code_ratio
+            'comment_ratio': comment_code_ratio,
+            'diff_results': diff_results
         }
 
         return JsonResponse(data)
