@@ -59,10 +59,13 @@
           </div>
           <div class="row justify-content-center">
               <div class="col-7  mb-5">
-                  <div>
-                      <div id="editor" class="ace-dawn"></div>
+                  <div id="editor" class="ace-dawn"></div>
+                  <div class="button-group btn-group-sm mt-3" role="group">
+                      <button id="submit-button" class="btn btn-info">Run Code</button>
+                      <button class="btn btn-danger" onclick="saveTextAsFile()">Save Text to File</button>
                   </div>
-                  <button id="submit-button" class="btn btn-info mt-3">Run Code</button>
+
+
               </div>
               <div class="col-4">
                   <div class="card" id="error-card">
@@ -127,6 +130,34 @@
         editor.setValue("def {{ assignment.function_definition }}(num):\n\t#insert code here\n\t")
         editor.gotoLine(3);
         editor.getSession().setTabSize(4);
+
+        // ------- save editor contents to file ---- //
+        function saveTextAsFile() {
+            var aceText = editor.getValue();
+
+            var textFileAsBlob = new Blob([aceText], {
+                type: 'text/plain'
+            });
+            var fileNameToSaveAs = "{{ assignment.title }}";
+
+            var downloadLink = document.createElement("a");
+            // specify name of download file
+            downloadLink.download = fileNameToSaveAs;
+            if (window.webkitURL != null) {
+                // Chrome allows the link to be clicked
+                // without actually adding it to the DOM.
+                downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+            } else {
+                // Firefox requires the link to be added to the DOM
+                // before it can be clicked.
+                downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+                downloadLink.onclick = destroyClickedElement;
+                downloadLink.style.display = "none";
+                document.body.appendChild(downloadLink);
+            }
+
+            downloadLink.click();
+        }
 
 
         // -------- submit code ----------- //
