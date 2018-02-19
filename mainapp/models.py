@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class InstructionFile(models.Model):
     title = models.CharField(max_length=100)
     file = models.FileField(blank=True, null=True,
-        upload_to='instruction_files/%Y/%m/%d')
+        upload_to='instructionfiles/%Y/%m/%d')
 
     def __str__(self):
         return self.title
@@ -44,14 +44,13 @@ class UserProfile(models.Model):
 
 
 class Submission(models.Model):
-    assignment = models.ForeignKey(Assignment)
-    file = models.FileField(blank=True, null=True,
-         upload_to='submitted_files/')
+    assignment = models.ForeignKey(Assignment, editable=False)
+    file = models.FileField(blank=True, null=True, editable=False)
     date_submitted = models.DateField(blank=True)
     time_submitted = models.TimeField(blank=True)
     user = models.OneToOneField(User)
     correct = models.BooleanField(default=False)
     comment_ratio = models.IntegerField()
 
-    def __str__(self):
+    def __FieldFile__(self):
         return self.file

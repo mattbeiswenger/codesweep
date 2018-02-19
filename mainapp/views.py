@@ -8,6 +8,7 @@ from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.http import require_http_methods
 from django.http import Http404, HttpResponseNotFound, HttpResponseRedirect
 from django.http import HttpResponse, HttpRequest, JsonResponse
+from django.conf import settings
 
 # modules for code submission
 import os
@@ -83,9 +84,15 @@ def submit_text(request):
         downloads_folder = ('/Users/matthewbeiswenger/Downloads')
 
         # create paths to individual files
-        code_path = os.path.join(downloads_folder, python_code_file)
-        inputs_path = os.path.join(downloads_folder, 'inputs.txt')
-        expected_outputs_path = os.path.join(downloads_folder, 'expected--outputs.txt')
+        code_path = os.path.join(settings.MEDIA_ROOT, 'code', python_code_file)
+        sys.stderr.write(repr(code_path) + '\n')
+        inputs_path = os.path.join(settings.MEDIA_ROOT, 'inputs', assignment_title, 'inputs.txt')
+        expected_outputs_path = os.path.join(settings.MEDIA_ROOT, 'expectedoutputs', assignment_title, 'expected--outputs.txt')
+        code_output_path = os.path.join('temp_files', 'code_output_files', code_output_file)
+
+        # if the directories for the inputs path don't exist, make them
+        os.makedirs(os.path.dirname(inputs_path), exist_ok=True)
+        os.makedirs(os.path.dirname(expected_outputs_path), exist_ok=True)
 
         # create user's code file
         with open(code_path, 'w') as code_file:
@@ -121,29 +128,25 @@ def submit_text(request):
                 if item != "," and item != " ":
                     expected_outputs_file.write(item + '\n')
 
-        # change directory
-        os.chdir(downloads_folder)
 
         # take in file input
         # create outputs file and error file
-        os.system('python3 ' + python_code_file + ' inputs.txt ' + \
-        code_output_file + ' 2> error.txt')
+        os.system('python3 {} {} {} 2> temp_files/error_files/error.txt'.format(code_path, inputs_path, code_output_path))
 
-        os.system('diff -q ' + code_output_file + ' expected--outputs.txt > \
-                    diff-results.txt')
+        os.system('diff -q {} {} > temp_files/diff_files/diff-results.txt'.format(code_output_path, expected_outputs_path))
 
         # read the error file
-        with open('error.txt', 'r') as error_file:
+        with open('temp_files/error_files/error.txt', 'r') as error_file:
             # skip the lines relating to traceback to Main()
             errorfile = error_file.readlines()[5:]
         errorfile = "".join(errorfile)
 
         # read the outputs file
-        with open(code_output_file, 'r') as output_file:
+        with open(code_output_path, 'r') as output_file:
             outputfile = output_file.read()
 
         # read the outputs file
-        with open('diff-results.txt', 'r') as diff_file:
+        with open('temp_files/diff_files/diff-results.txt', 'r') as diff_file:
             diff_results = diff_file.read()
 
 
@@ -172,32 +175,39 @@ def submit_text(request):
         for item in code:
             code_sum += 1
 
-        comment_code_ratio = comment_sum/code_sum
+        comment_code_ratio = (comment_sum/code_sum)*100
 
 
         # ----------------------------------------------------- #
-        # assignment = models.ForeignKey(Assignment)
-        # file = models.FileField(blank=True, null=True,
-        #      upload_to='submitted_files/')
-        # date_submitted = models.DateField(blank=True)
-        # time_submitted = models.TimeField(blank=True)
-        # user = models.ForeignKey(UserProfile, editable=False)
-        # correct = models.BooleanField(default=False)
-        # comment_ratio = models.IntegerField()
-        correct = False
-        if (diff_results):
-            correct = True
 
+        correct = True
+        if (diff_results):
+            correct = False
+
+        sys.stderr.write(repr(diff_results) + '\n')
+
+
+        # -- obtain foreign fields from the db
+        # obtain the db object for the current user
         current_user = User.objects.get(username=user)
+        # change the assignment_title string so that it matches the
+        # on in the database
         assignment_title = assignment_title.replace("+", " ")
+        # obtain the db object for the current assignment
         current_assignment = Assignment.objects.get(title=assignment_title)
+
+        # change the code path so that the server
+        # can find it's address relative to the site's main page
+        # if this wasn't changed, it would include the entire path
+        # on the computer. For example, users/documents/python/codesweep/ etc...
+        code_path = os.path.join('code', python_code_file)
 
 
         # create submission record
         submission = Submission()
         submission.user = current_user
         submission.assignment = current_assignment
-        submission.file = code_file
+        submission.file = code_path
         submission.date_submitted = datetime.datetime.now()
         submission.time_submitted = datetime.datetime.now()
         submission.correct = correct
