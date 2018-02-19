@@ -178,16 +178,16 @@
 
                         if (data.comment_ratio) {
                             var comment_percentage = data.comment_ratio;
-                            comment_percentage = comment_percentage.toFixed(2);
+                            comment_percentage = comment_percentage.toFixed();
                             // change color of ring
-                            if (comment_percentage*100 < {{ assignment.comment_to_code_ratio }}) {
+                            if (comment_percentage < {{ assignment.comment_to_code_ratio }}) {
                                 $('#progress_circle').attr("stroke", "#D72E3D")
                             } else {
                                 $('#progress_circle').attr("stroke", "#249D3D")
                             }
 
-                            $('#comment_percentage').text((comment_percentage*100) + '%');
-                            stroke_ratio = 590.6194189 * (1 - comment_percentage);
+                            $('#comment_percentage').text((comment_percentage) + '%');
+                            stroke_ratio = 590.6194189 * (1 - (comment_percentage/100).toFixed(2));
                             $('#progress_circle').attr("stroke-dashoffset", stroke_ratio);
                         }
 
