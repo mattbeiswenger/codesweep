@@ -13,6 +13,8 @@ class SubmissionAdmin(admin.ModelAdmin):
     readonly_fields=('user', 'assignment', 'file', 'date_submitted',
         'time_submitted', 'correct', 'comment_ratio')
 
+    list_filter = ('user', 'assignment', 'correct')
+
 
 admin.site.register(Assignment, AssignmentAdmin)
 admin.site.register(UserProfile)
