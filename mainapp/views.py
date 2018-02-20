@@ -88,6 +88,7 @@ def submit_text(request):
         code_path = os.path.join(settings.MEDIA_ROOT, 'code', python_code_file)
 
         inputs_path = os.path.join(settings.MEDIA_ROOT, 'inputs', assignment_title, 'inputs.txt')
+        sysargv_path = os.path.join(settings.STATIC_DIR, 'sysargv', 'sysargv.txt')
         expected_outputs_path = os.path.join(settings.MEDIA_ROOT, 'expectedoutputs', assignment_title, 'expected--outputs.txt')
         code_output_path = os.path.join('temp_files', 'code_output_files', code_output_file)
 
@@ -96,26 +97,9 @@ def submit_text(request):
         os.makedirs(os.path.dirname(expected_outputs_path), exist_ok=True)
 
         # create user's code file
-        with open(code_path, 'w') as code_file:
-                # write users code to the file
+        with open(code_path, 'w') as code_file, open(sysargv_path, 'r') as sysarg_file:
                 code_file.write(code)
-
-                # import sys under user-submitted code
-                code_file.write("\n\n")
-                code_file.write("import sys")
-
-                # create sys Main() function
-                code_file.write("\n\n")
-                code_file.write("def Main():\n\t")
-                code_file.write("with open(sys.argv[1], 'r') as input, " + \
-                    "open(sys.argv[2], 'w') as output:\n\t\t")
-                code_file.write("for line in input:\n\t\t\t")
-                code_file.write("output.write(str(" + function + \
-                                "(int(line))) + '\\n')")
-                code_file.write("\n\n")
-
-                # create if __name__ == '__main__'
-                code_file.write("if __name__ == '__main__':\n\tMain()")
+                code_file.write(sysarg_file.read())
 
         # create inputs file
         with open(inputs_path, 'w') as inputs_file:
