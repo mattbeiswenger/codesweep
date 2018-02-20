@@ -60,9 +60,15 @@
           <div class="row justify-content-center">
               <div class="col-7  mb-5">
                   <div id="editor" class="ace-dawn"></div>
-                  <div class="button-group btn-group-sm mt-3" role="group">
-                      <button id="submit-button" class="btn btn-info">Run Code</button>
-                      <button class="btn btn-danger" onclick="saveTextAsFile()">Save Text to File</button>
+                  <div class="btn-group btn-group-sm mt-3 ml-3" role="group">
+                    <button id="submit-button" class="btn btn-dark" onclick="this.blur()">Run Code</button>
+                  </div>
+                  <div class="btn-group btn-group-sm mt-3 ml-3" role="group">
+                      <button id="save-file-button" class="btn btn-dark" onclick="saveTextAsFile();this.blur();">Save Text to File</button>
+                      <button class="btn btn-dark" onclick="fileUpload();this.blur();">
+                          Upload File
+                      </button>
+                      <input id="upload" type="file" class="d-none">
                   </div>
 
 
@@ -133,6 +139,7 @@
 
         // ------- save editor contents to file ---- //
         function saveTextAsFile() {
+
             var aceText = editor.getValue();
 
             var textFileAsBlob = new Blob([aceText], {
@@ -159,6 +166,45 @@
             downloadLink.click();
         }
 
+        // -------- upload contents of file ---------//
+        function fileUpload() {
+            document.getElementById('upload').click();
+        }
+
+
+        $("#upload").change(function(e) {
+
+            var file = document.getElementById("upload").files[0];
+            reader = new FileReader();
+            reader.onload = function(event){
+                 editor.setValue(event.target.result)
+            }
+            reader.readAsText(file)
+        });
+
+        // drag and drop files
+        var dropzone = document.getElementById('editor')
+        dropzone.ondragover = function() {
+            //this.className = 'dropzone dragover';
+            return false;
+            console.log(e.datatransfer.files)
+        }
+
+        dropzone.ondragleave = function() {
+            // this.className = 'dropzone';
+            return false;
+        }
+
+        dropzone.ondrop = function(e) {
+            e.preventDefault();
+
+            var file = e.dataTransfer.files[0];
+            reader = new FileReader();
+            reader.onload = function(event){
+                 editor.setValue(event.target.result)
+            }
+            reader.readAsText(file)
+        }
 
         // -------- submit code ----------- //
         $(document).ready(function(){
@@ -197,15 +243,6 @@
                             $('#console').addClass("text-muted");
                         }
 
-                        // // write outputs to output tab
-                        // if (data.output) {
-                        //     $('#outputs').text(data.output);
-                        //     // trigger click to go to tab
-                        //     $('#outputs-tab').trigger('click');
-                        // }
-                        // else {
-                        //     $('#outputs').text("");
-                        // }
 
                         if (data.comment_ratio) {
                             var comment_percentage = data.comment_ratio;
@@ -233,38 +270,6 @@
                 });
             });
         });
-
-
-
-        // drag and drop files
-        var dropzone = document.getElementById('editor')
-        dropzone.ondragover = function() {
-            //this.className = 'dropzone dragover';
-            return false;
-            console.log(e.datatransfer.files)
-        }
-
-        dropzone.ondragleave = function() {
-            // this.className = 'dropzone';
-            return false;
-        }
-
-        dropzone.ondrop = function(e) {
-            e.preventDefault();
-
-            var file = e.dataTransfer.files[0];
-            reader = new FileReader();
-            reader.onload = function(event){
-                 editor.setValue(event.target.result)
-            }
-            reader.readAsText(file)
-        }
-
-        var ProgressBar = require('progressbar.js')
-        var ProgressBar = new ProgressBar.Circle('#comments', {
-            strokeWidth: 2
-        });
-
 
     </script>
 </body>
