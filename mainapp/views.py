@@ -34,7 +34,7 @@ def show_assignment(request, assignment_name_slug):
         context_dict = {}
         assignment = Assignment.objects.get(slug=assignment_name_slug)
         context_dict['assignment'] = assignment
-    except Category.DoesNotExist:
+    except Assignment.DoesNotExist:
         context_dict['assignment'] = None
 
     return render(request, 'mainapp/projectpage.html', context_dict)
@@ -49,6 +49,7 @@ def submit_text(request):
 
         code = data['code_text'] # obtain submitted code
         user = data['user'] # obtain the user submitting the code
+        sys.stderr.write(repr(user) + '\n')
         assignment_title = data['assignment_title'] # obtain assignment title
 
         code = code[1:-1] # remove beginning and end quotes
@@ -85,7 +86,7 @@ def submit_text(request):
 
         # create paths to individual files
         code_path = os.path.join(settings.MEDIA_ROOT, 'code', python_code_file)
-        sys.stderr.write(repr(code_path) + '\n')
+
         inputs_path = os.path.join(settings.MEDIA_ROOT, 'inputs', assignment_title, 'inputs.txt')
         expected_outputs_path = os.path.join(settings.MEDIA_ROOT, 'expectedoutputs', assignment_title, 'expected--outputs.txt')
         code_output_path = os.path.join('temp_files', 'code_output_files', code_output_file)
@@ -184,7 +185,6 @@ def submit_text(request):
         if (diff_results):
             correct = False
 
-        sys.stderr.write(repr(diff_results) + '\n')
 
 
         # -- obtain foreign fields from the db
