@@ -9,6 +9,7 @@ from django.views.decorators.http import require_http_methods
 from django.http import Http404, HttpResponseNotFound, HttpResponseRedirect
 from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.conf import settings
+from django.shortcuts import redirect
 
 # modules for code submission
 import os
@@ -58,6 +59,8 @@ def submit_text(request):
         inputs = Assignment.objects.get(title=assignment_title).inputs
         expected_outputs = Assignment.objects.get(title=assignment_title).outputs
 
+        # retrieve assignment object to be used in submission record
+        current_assignment = Assignment.objects.get(title=assignment_title)
 
         # replace spaces with underscores
         # so the title can be used in a filename
@@ -167,11 +170,6 @@ def submit_text(request):
         # -- obtain foreign fields from the db
         # obtain the db object for the current user
         current_user = User.objects.get(username=user)
-        # change the assignment_title string so that it matches the
-        # on in the database
-        assignment_title = assignment_title.replace("+", " ")
-        # obtain the db object for the current assignment
-        current_assignment = Assignment.objects.get(title=assignment_title)
 
         # change the code path so that the server
         # can find it's address relative to the site's main page
@@ -235,7 +233,7 @@ def user_login(request):
 
                 # log the user in
                 login(request, user)
-                return assignments(request)
+                return redirect('/assignments/')
             else:
 
                 # an inactive account was used

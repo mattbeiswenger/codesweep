@@ -22,9 +22,11 @@ from django.conf.urls import include
 from django.views.static import serve
 
 urlpatterns = [
-    url(r'^$', views.index, name="index"),
-    url(r'^assignments/', include('mainapp.urls')),
+    url(r'^$', views.index, name='index'),
+    url(r'^login/', views.user_login, name='user_login'),
+    url(r'^logout/$', views.user_logout, name='logout'),
     url(r'^admin/', admin.site.urls),
+    url(r'^assignments/', include('mainapp.urls'))
 ]
 
 if settings.DEBUG is True:

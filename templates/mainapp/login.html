@@ -14,7 +14,7 @@
     <body>
       <div class="container text-center mt-5">
             <h1 class="display-4 mb-4">CodeSweep</h1>
-            <form id="login_form" method="post" action="{% url 'user_login' %}" class="col-lg-6 mx-auto">
+            <form id="login_form" method="post" action="/login/" class="col-lg-6 mx-auto">
                 <div class="form-group">
                 {% csrf_token %}
                 <input id="username" type="text" name="username" value="" class="form-control" placeholder="Username">
