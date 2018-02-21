@@ -49,7 +49,6 @@ def submit_text(request):
 
         code = data['code_text'] # obtain submitted code
         user = data['user'] # obtain the user submitting the code
-        sys.stderr.write(repr(user) + '\n')
         assignment_title = data['assignment_title'] # obtain assignment title
 
         code = code[1:-1] # remove beginning and end quotes
@@ -81,12 +80,8 @@ def submit_text(request):
         # un-escape backslash-escaped code string
         code = bytes(code, "utf-8").decode("unicode_escape")
 
-        # create path to downloads folder
-        downloads_folder = ('/Users/matthewbeiswenger/Downloads')
-
         # create paths to individual files
         code_path = os.path.join(settings.MEDIA_ROOT, 'code', python_code_file)
-
         inputs_path = os.path.join(settings.MEDIA_ROOT, 'inputs', assignment_title, 'inputs.txt')
         sysargv_path = os.path.join(settings.STATIC_DIR, 'sysargv', 'sysargv.txt')
         expected_outputs_path = os.path.join(settings.MEDIA_ROOT, 'expectedoutputs', assignment_title, 'expected--outputs.txt')
@@ -168,8 +163,6 @@ def submit_text(request):
         correct = True
         if (diff_results):
             correct = False
-
-
 
         # -- obtain foreign fields from the db
         # obtain the db object for the current user

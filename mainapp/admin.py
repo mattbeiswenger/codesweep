@@ -1,5 +1,5 @@
 from django.contrib import admin
-from mainapp.models import Assignment, UserProfile, InstructionFile, Submission
+from mainapp.models import Assignment, InstructionFile, Submission
 
 # Register your models here.
 
@@ -17,6 +17,5 @@ class SubmissionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Assignment, AssignmentAdmin)
-admin.site.register(UserProfile)
 admin.site.register(InstructionFile)
 admin.site.register(Submission, SubmissionAdmin)

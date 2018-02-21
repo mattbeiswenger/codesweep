@@ -1,4 +1,6 @@
-
+def function(num):
+	#insert code here
+	return num + 1
 
 import sys
 

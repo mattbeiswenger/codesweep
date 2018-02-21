@@ -36,19 +36,13 @@ class Assignment(models.Model):
     def __str__(self):
         return self.title
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User)
-
-    def __str__(self):
-        return self.user.username
-
 
 class Submission(models.Model):
     assignment = models.ForeignKey(Assignment, editable=False)
     file = models.FileField(blank=True, null=True, editable=False)
     date_submitted = models.DateField(blank=True)
     time_submitted = models.TimeField(blank=True)
-    user = models.OneToOneField(User)
+    user = models.ForeignKey(User)
     correct = models.BooleanField(default=False)
     comment_ratio = models.IntegerField()
 
