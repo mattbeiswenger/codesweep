@@ -21,7 +21,12 @@ import sys
 
 
 def index(request):
-    return render(request, 'mainapp/login.html')
+    if request.user.is_authenticated():
+        return redirect('/assignments/')
+    else:
+        # an inactive account was used
+        return render(request, 'mainapp/login.html')
+
 
 @login_required
 def assignments(request):
