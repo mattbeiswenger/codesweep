@@ -133,7 +133,7 @@
         var editor = ace.edit("editor");
         editor.setTheme("ace/theme/chrome");
         editor.getSession().setMode("ace/mode/python");
-        editor.setValue("def {{ assignment.function_definition }}(num):\n\t#insert code here\n\t")
+        editor.setValue("def {{ assignment.function_definition }}:\n\t#insert code here\n\t")
         editor.gotoLine(3);
         editor.getSession().setTabSize(4);
 
