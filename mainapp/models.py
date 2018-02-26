@@ -48,3 +48,26 @@ class Submission(models.Model):
 
     def __FieldFile__(self):
         return self.file
+
+class AvailableCourse(models.Model):
+    professors = models.ForeignKey("auth.User", limit_choices_to={'groups__name': "Faculty"})
+    section = models.IntegerField()
+
+
+class CourseList(models.Model):
+    COMPUTER_SCIENCE = 'CSC'
+    MEDIA = 'MED'
+    YEAR_IN_SCHOOL_CHOICES = (
+        (COMPUTER_SCIENCE, 'CSC'),
+        (MEDIA, 'MED'),
+
+
+    )
+
+    subject = models.CharField(
+        max_length = 3,
+        choices = YEAR_IN_SCHOOL_CHOICES,
+    )
+
+    course_number = models.CharField(max_length = 3)
+    section_id = models.CharField(max_length = 3)
