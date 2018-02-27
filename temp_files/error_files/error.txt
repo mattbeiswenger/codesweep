@@ -1,0 +1,4 @@
+  File "/Users/matthewbeiswenger/Documents/Python/Django/codesweep/media/code/mbeiswenger--Homework+1--2018-02-27--16-57-41.py", line 1
+    def monkey_trouble(a_smile, b_smile)::
+                                         ^
+SyntaxError: invalid syntax

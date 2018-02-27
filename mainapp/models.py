@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+import datetime
 
 class InstructionFile(models.Model):
     title = models.CharField(max_length=100)
@@ -9,6 +10,53 @@ class InstructionFile(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    is_faculty = models.BooleanField(('faculty status'), default=False,
+        help_text=('Designates whether the user is a faculty member.'))
+    is_student = models.BooleanField(('student status'), default=False,
+        help_text=('Designates whether the user is a student'))
+
+    def __str__(self):
+        return str(self.user)
+
+
+class Term(models.Model):
+    FALL = 'FA'
+    WINTER = 'WI'
+    SPRING = 'SP'
+    SEASON_CHOICES = (
+        (FALL, 'Fall'),
+        (WINTER, 'Winter'),
+        (SPRING, 'Spring'),
+    )
+    season = models.CharField(
+        max_length=2,
+        choices=SEASON_CHOICES,
+    )
+
+    YEAR_CHOICES = []
+    for r in range(1980, (datetime.datetime.now().year+1)):
+        YEAR_CHOICES.append((r,r))
+
+    year = models.IntegerField(('year'), choices=YEAR_CHOICES, default=datetime.datetime.now().year)
+
+    def __str__(self):
+        return str(self.year) + "/" + self.season
+
+
+class Course(models.Model):
+    course_subject = models.CharField(max_length=3)
+    course_number = models.CharField(max_length=3)
+    section_id = models.CharField(max_length=3)
+    professor = models.ForeignKey(Profile)
+    term = models.ForeignKey(Term)
+
+    def __str__(self):
+        return '{}_{}_{}'.format(self.course_subject, self.course_number, self.section_id)
+
 
 class Assignment(models.Model):
     title = models.CharField(max_length=128, unique=True)
@@ -24,7 +72,9 @@ class Assignment(models.Model):
                     characters that are within comments, compared to the \
                     entire body of code")
     slug = models.SlugField(unique=True)
+    course = models.ForeignKey(Course)
     instruction_file = models.ManyToManyField(InstructionFile, blank=True)
+
 
 
 
@@ -48,26 +98,3 @@ class Submission(models.Model):
 
     def __FieldFile__(self):
         return self.file
-
-class AvailableCourse(models.Model):
-    professors = models.ForeignKey("auth.User", limit_choices_to={'groups__name': "Faculty"})
-    section = models.IntegerField()
-
-
-class CourseList(models.Model):
-    COMPUTER_SCIENCE = 'CSC'
-    MEDIA = 'MED'
-    YEAR_IN_SCHOOL_CHOICES = (
-        (COMPUTER_SCIENCE, 'CSC'),
-        (MEDIA, 'MED'),
-
-
-    )
-
-    subject = models.CharField(
-        max_length = 3,
-        choices = YEAR_IN_SCHOOL_CHOICES,
-    )
-
-    course_number = models.CharField(max_length = 3)
-    section_id = models.CharField(max_length = 3)
