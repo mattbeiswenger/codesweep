@@ -122,6 +122,8 @@ def submit_text(request):
 
 			code_file.write(code)
 			code_file.write("\n\n")
+			code_file.write("import sys")
+			code_file.write("\n\n")
 			code_file.write("def Main():\n\t")
 			code_file.write("with open(sys.argv[1], 'r') as input, open(sys.argv[2], 'w') as output:\n\t\t")
 
