@@ -31,7 +31,7 @@ def index(request):
 @login_required
 def assignments(request):
 	assignment_list = Assignment.objects.all()
-	course_list = Course.objects.all()
+	course_list = Course.objects.filter(students = request.user)
 	context_dict = {
 		'assignments': assignment_list,
 		'courses': course_list,
