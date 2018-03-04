@@ -122,7 +122,6 @@ def submit_text(request):
 
 			code_file.write(code)
 			code_file.write("\n\n")
-			code_file.write("import sys\n\n")
 			code_file.write("def Main():\n\t")
 			code_file.write("with open(sys.argv[1], 'r') as input, open(sys.argv[2], 'w') as output:\n\t\t")
 
@@ -133,8 +132,6 @@ def submit_text(request):
 			numVariable = ""
 			variableList = []
 
-			def bool(v):
-				return v in ("True")
 
 			for line in input_file:
 				for index, c in enumerate(line):
@@ -149,10 +146,10 @@ def submit_text(request):
 						numVariable += c
 
 					if not inDoubleQuotes and line[index:index + 5] == "False":
-						variableList.append("bool(False)")
+						variableList.append("False")
 
 					if not inDoubleQuotes and line[index:index + 4] == "True":
-						variableList.append("bool(True)")
+						variableList.append("True")
 
 					# account for the beginning of iteration
 					if index == 0 and line[index] == "\"":
@@ -199,6 +196,7 @@ def submit_text(request):
 				code_file.write("output.write(str(" + function_name + "(" + variableList + ")) + '\\n')\n\t\t")
 				variableList = []
 
+
 			code_file.write("\n\n")
 			code_file.write("if __name__ == '__main__':\n\t")
 			code_file.write("Main()")
@@ -208,11 +206,6 @@ def submit_text(request):
 
 
 # ------- PARSING INPUTS ----------------- #
-
-
-
-
-
 
 		# take in file input
 		# create outputs file and error file
@@ -230,9 +223,13 @@ def submit_text(request):
 		with open(code_output_path, 'r') as output_file:
 			outputfile = output_file.read()
 
-		with open(code_output_path, 'rb+') as f:
-			f.seek(-1, os.SEEK_END)
-			f.truncate()
+		try:
+			with open(code_output_path, 'rb+') as f:
+				f.seek(-1, os.SEEK_END)
+				f.truncate()
+		except OSError:
+			print("Cannot remove lines from empty file")
+
 
 		# read the outputs file
 		with open('temp_files/diff_files/diff-results.txt', 'r') as diff_file:

@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/matthewbeiswenger/Documents/Python/Django/codesweep/media/code/mbeiswenger--Homework+1--2018-03-03--19-00-19.py", line 18, in <module>
+    Main()
+  File "/Users/matthewbeiswenger/Documents/Python/Django/codesweep/media/code/mbeiswenger--Homework+1--2018-03-03--19-00-19.py", line 11, in Main
+    with open(sys.argv[1], 'r') as input, open(sys.argv[2], 'w') as output:
+NameError: name 'sys' is not defined
