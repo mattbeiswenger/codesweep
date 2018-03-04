@@ -14,26 +14,6 @@ class InstructionFile(models.Model):
         return self.title
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    is_faculty = models.BooleanField(('faculty status'), default=False,
-        help_text=('Designates whether the user is a faculty member.'))
-    is_student = models.BooleanField(('student status'), default=False,
-        help_text=('Designates whether the user is a student'))
-
-    @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
-        if created:
-            Profile.objects.create(user=instance)
-
-    @receiver(post_save, sender=User)
-    def save_user_profile(sender, instance, **kwargs):
-        instance.profile.save()
-
-    def __str__(self):
-        return str(self.user)
-
-
 class Term(models.Model):
     FALL = 'FA'
     WINTER = 'WI'
@@ -62,7 +42,7 @@ class Course(models.Model):
     course_subject = models.CharField(max_length=3)
     course_number = models.CharField(max_length=3)
     section_id = models.CharField(max_length=3)
-    professor = models.ForeignKey(Profile)
+    professor = models.ForeignKey("auth.User", limit_choices_to={'groups__name': "Faculty"})
     term = models.ForeignKey(Term)
 
     def __str__(self):
@@ -96,6 +76,7 @@ class Assignment(models.Model):
 
     def __str__(self):
         return self.title
+
 
 
 class Submission(models.Model):

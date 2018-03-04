@@ -17,7 +17,7 @@
   <body>
       <nav class="bg-info navbar navbar-expand-lg navbar-light justify-content-end">
           <div class="navbar-nav">
-            {% if user.profile.is_faculty %}
+            {% if perms.assignment.can_add_assignment %}
             <a class="btn btn-info text-white nav-item nav-link" href="/assignments/">Create Assignment</a>
             {% endif %}
             <a class="btn btn-info text-white nav-item nav-link" href="/assignments/">Assignments</a>
