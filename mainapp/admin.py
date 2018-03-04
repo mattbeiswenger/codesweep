@@ -2,7 +2,6 @@ from django.contrib import admin
 from mainapp.models import Assignment, InstructionFile, Submission
 from mainapp.models import Course, Term
 
-# Register your models here.
 
 class AssignmentAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug':('title',)}

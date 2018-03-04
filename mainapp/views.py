@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from mainapp.models import Assignment, Submission
+from mainapp.models import Assignment, Submission, Course
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.http import require_http_methods
 from django.http import Http404, HttpResponseNotFound, HttpResponseRedirect
@@ -31,7 +31,11 @@ def index(request):
 @login_required
 def assignments(request):
 	assignment_list = Assignment.objects.all()
-	context_dict = {'assignments': assignment_list}
+	course_list = Course.objects.all()
+	context_dict = {
+		'assignments': assignment_list,
+		'courses': course_list,
+	}
 	return render(request, 'mainapp/assignments.html', context_dict)
 
 @login_required

@@ -39,9 +39,9 @@
                           Classes
                       </div>
                       <div class="list-group">
-                          <a href="" class="list-group-item list-group-item-action">CSC 160</a>
-                          <a href="" class="list-group-item list-group-item-action">CSC 161</a>
-                          <a href="" class="list-group-item list-group-item-action">CSC 210</a>
+                          {% for course in courses %}
+                          <a href="" class="list-group-item list-group-item-action">{{ course.course_subject }} {{ course.course_number }}</a>
+                          {% endfor %}
                       </div>
                   </div>
               </div>
