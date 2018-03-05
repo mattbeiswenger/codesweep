@@ -47,10 +47,14 @@
 
 
 	<div class="container pt-5">
+
+
 		<div class="row justify-content-between">
-			<div class="col-md-auto mt-5">
+
+			<!--  COURSES CARD -->
+			<div class="col-md mt-5">
 				{% if courses %}
-				<div class="card" style="width: 18rem;">
+				<div class="card w-100">
 					  <div class="card-header">
 						  Courses
 					  </div>
@@ -64,6 +68,9 @@
 
 				{% endif %}
 			</div>
+			<!--  -->
+
+			<!--  ASSIGNMENTS -->
 			<div class="animated bounceInUp col col-lg-8 mb-5">
 				{% if assignments %} {% for assignment in assignments %}
 				<div class="card mt-5">
@@ -83,10 +90,11 @@
 				</div>
 				{% endfor %}
 			</div>
+			<!--  -->
+			{% else %}
+			<div class="display-3 text-center mt-4"> Homework will be posted momentarily </div>
+			{% endif %}
 		</div>
-		{% else %}
-		<div class="display-3 text-center mt-4"> Homework will be posted momentarily </div>
-		{% endif %}
 	</div>
 
 	<!-- Optional JavaScript -->
