@@ -17,19 +17,31 @@
     <title>CodeSweep | {{ assignment.title }}</title>
   </head>
   <body>
-      <nav class="bg-info navbar navbar-expand-lg navbar-light justify-content-end">
-          <div class="navbar-nav">
-            <a class="btn btn-info text-white nav-item nav-link" href="/assignments/">Assignments</a>
-            <div class="dropdown">
-                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Account
-                </button>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
-                </div>
-            </div>
-          </div>
-      </nav>
+      <nav class="navbar navbar-expand-md navbar-dark bg-info">
+  		<div class="container">
+  			<a href="/assignments/" class="navbar-brand">Codesweep</a>
+  			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar7">
+  		        <span class="navbar-toggler-icon"></span>
+  		    </button>
+  			<div class="navbar-collapse collapse justify-content-stretch" id="navbar7">
+  				<ul class="navbar-nav ml-auto">
+  					<li class="nav-item">
+  						<a class="nav-link" href="/assignments/">Assignments</a>
+  					</li>
+  					<li class="nav-item dropdown">
+  						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
+
+  						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+  							<a class="dropdown-item" href="#">Action</a>
+  							<a class="dropdown-item" href="#">Another action</a>
+  							<div class="dropdown-divider"></div>
+  							<a class="dropdown-item" href="/logout">Logout</a>
+  						</div>
+  					</li>
+  				</ul>
+  			</div>
+  		</div>
+  	</nav>
       <div class="container-fluid mt-5 mb-5">
           <div class="row justify-content-start">
               <div class="col col-lg-6 offset-md-1">
