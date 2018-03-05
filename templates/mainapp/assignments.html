@@ -4,102 +4,113 @@
 
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
-    <!--  Animate.css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+	<!--  Animate.css -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
 
-    <title>CodeSweep | Assignments</title>
+	<title>CodeSweep | Assignments</title>
   </head>
   <body>
-      <nav class="bg-info navbar navbar-expand-lg navbar-light justify-content-end">
-          <div class="navbar-nav">
-            {% if perms.assignment.can_add_assignment %}
-            <a class="btn btn-info text-white nav-item nav-link" href="/assignments/">Create Assignment</a>
-            {% endif %}
-            <a class="btn btn-info text-white nav-item nav-link" href="/assignments/">Assignments</a>
-            <div class="dropdown">
-                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Account
-                </button>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
-                </div>
-            </div>
-          </div>
-      </nav>
-      <div class="container pt-5">
-          <div class="row justify-content-between">
-              <div class="col-md-auto mt-5">
-                  <div class="card" style="width: 18rem;">
-                      <div class="card-header">
-                          Classes
-                      </div>
-                      <div class="list-group">
-                          {% for course in courses %}
-                          <a href="" class="list-group-item list-group-item-action">{{ course.course_subject }} {{ course.course_number }}</a>
-                          {% endfor %}
-                      </div>
-                  </div>
-              </div>
-              <div class="animated bounceInUp col col-lg-8 mb-5">
-                  {% if assignments %}
-                  {% for assignment in assignments %}
-                      <div class="card mt-5">
-                          <div class="card-header">
-                              <div>
-                                  Due {{ assignment.date_due }} at {{ assignment.time_due }}
-                                  <div class="float-right">
-                                      Points: {{ assignment.points }}
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="card-body">
-                              <h5 class="card-title">{{ assignment.title }}</h5>
-                              <p class="card-text">{{ assignment.description }}</p>
-                              <a href="{{ assignment.slug }}" class="btn btn-primary float-right btn-info">Get Started</a>
-                          </div>
-                      </div>
-                  {% endfor %}
+	  <nav class="bg-info navbar navbar-expand-lg navbar-light justify-content-end">
+		  <div class="navbar-nav">
+			{% if perms.assignment.can_add_assignment %}
+			<a class="btn btn-info text-white nav-item nav-link" href="/assignments/">Create Assignment</a>
+			{% endif %}
+			<a class="btn btn-info text-white nav-item nav-link" href="/assignments/">Assignments</a>
+			<div class="dropdown">
+				<button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Account
+				</button>
+				<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+					<a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+				</div>
+			</div>
+		  </div>
+	  </nav>
+	  <div class="container pt-5">
+		  <div class="row justify-content-between">
+			  <div class="col-md-auto mt-5">
+				  <div class="card" style="width: 18rem;">
+					  <div class="card-header">
+						  Courses
+					  </div>
+					  <div class="list-group">
+						  <a href="#" class="list-group-item list-group-item-action">All</a>
+						  {% for course in courses %}
+						  <a href="{{ course.subject }}{{ course.number }}" class="list-group-item list-group-item-action waves-effect">{{ course.subject }} {{ course.number }}</a>
+						  {% endfor %}
+					  </div>
+				  </div>
+			  </div>
+			  <div class="animated bounceInUp col col-lg-8 mb-5">
+				  {% if assignments %}
+				  {% for assignment in assignments %}
+					  <div class="card mt-5">
+						  <div class="card-header">
+							  <div>
+								  Due {{ assignment.date_due }} at {{ assignment.time_due }}
+								  <div class="float-right">
+									  Points: {{ assignment.points }}
+								  </div>
+							  </div>
+						  </div>
+						  <div class="card-body">
+							  <h5 class="card-title">{{ assignment.title }}</h5>
+							  <p class="card-text">{{ assignment.description }}</p>
+							  <a href="{{ assignment.slug }}" class="btn btn-primary float-right btn-info">Get Started</a>
+						  </div>
+					  </div>
+				  {% endfor %}
+			  </div>
+		  </div>
+		  {% else %}
+		  <div class="display-3 text-center mt-4"> Homework will be posted momentarily </div>
+		  {% endif %}
+		</div>
 
-              </div>
-          </div>
-          {% else %}
-          <div class="display-3 text-center mt-4"> Homework will be posted momentarily </div>
-          {% endif %}
-        </div>
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
-
-    <script>
-
-    // $(document).ready(function(){
-    //
-    //     // send user data to view
-    //     $.ajax({
-    //         url: '/assignments/',
-    //         type: "POST",
-    //         data:
-    //         {
-    //             "user": "{{ request.user.username }}",
-    //             "csrfmiddlewaretoken": "{{ csrf_token }}",
-    //         },
-    //
-    //         success: function(data){
-    //             // alert(data.greeting)
-    //         }
-    //     });
-    // });
+	<script>
 
 
 
-    </script>
+	$(document).ready(function(){
+
+
+		{% for course in courses %}
+		alert("{{ course.subject }}");
+		{% endfor %}
+
+		$('#myList a').click(function (e) {
+			e.preventDefault()
+	  		$(this).tab('show')
+		})
+		// send user data to view
+		$.ajax({
+			url: '/assignments/',
+			type: "POST",
+			data:
+			{
+				"user": "{{ request.user.username }}",
+				"csrfmiddlewaretoken": "{{ csrf_token }}",
+			},
+
+			success: function(data){
+				// alert(data.greeting)
+			}
+		});
+	});
+
+
+
+	</script>
 </body>
 </html>

@@ -16,7 +16,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     list_filter = ('user', 'assignment', 'correct')
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('course_subject', 'course_number', 'section_id', 'term')
+    list_display = ('subject', 'number', 'professor', 'section', 'term')
 
 
 

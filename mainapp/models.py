@@ -39,15 +39,18 @@ class Term(models.Model):
 
 
 class Course(models.Model):
-    course_subject = models.CharField(max_length=3)
-    course_number = models.CharField(max_length=3)
-    section_id = models.CharField(max_length=3)
+    subject = models.CharField(max_length=3)
+    number = models.CharField(max_length=3)
+    section = models.CharField(max_length=3)
     professor = models.ForeignKey("auth.User", limit_choices_to={'groups__name': "Faculty"}, related_name="faculty_profile")
     term = models.ForeignKey(Term)
     students = models.ManyToManyField("auth.User", limit_choices_to={'groups__name': "Student"}, related_name="student_profile")
 
     def __str__(self):
-        return '{}_{}_{}'.format(self.course_subject, self.course_number, self.section_id)
+        return '{}_{}_{}'.format(self.subject, self.number, self.section)
+
+    class Meta:
+        unique_together = ("subject", "number", "section")
 
 
 class Assignment(models.Model):
