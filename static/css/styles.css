@@ -1,6 +1,6 @@
 #editor {
     height: 400px;
-    width: 750px;
+    width: 100%;
     border: 5px solid #E8E8E8;
     border-radius: 4px 4px 0 0;
 }
@@ -20,3 +20,5 @@
     display: block;
     margin: 0 auto;
 }
+
+.container { width: 1920px !important; }
