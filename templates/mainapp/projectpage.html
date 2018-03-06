@@ -9,7 +9,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../static/css/bootstrap.css">
+    <link rel="stylesheet" href="../../static/css/bootstrap-grid.css">
+    <link rel="stylesheet" href="../../static/css/bootstrap-reboot.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" type="text/css" href="../../static/css/styles.css">
 
@@ -65,7 +67,7 @@
                 {% endif %}
             </div>
             <!-- ATTACHMENTS -->
-            <div class="col-md-3 mt-3">
+            <div class="col-lg-3 mt-3">
                 {% if assignment.instruction_file.all %}
                 <div class="list-group">
                     <li class="list-group-item active bg-info border-info">
@@ -82,7 +84,7 @@
         <div class="row justify-content-between">
             <div class="col-md-7  mb-5">
                 <!-- EDITOR -->
-                <div id="editor" class="ace-dawn col"></div>
+                <div id="editor" class="ace-dawn"></div>
                 <!-- BUTTONS -->
                 <div class="btn-group btn-group-sm mt-3 ml-3" role="group">
                     <button id="submit-button" class="btn btn-dark" onclick="this.blur()">Run Code</button>
@@ -97,7 +99,7 @@
             </div>
 
             <!-- INFORMATIONAL INTERFACE -->
-            <div class="col-md-5">
+            <div class="col-lg-5">
                 <div class="card" id="error-card">
                     <div class="card-header">
                         <ul class="nav nav-tabs card-header-tabs">
@@ -147,7 +149,8 @@
     <!-- Popper.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <!-- Bootstrap JS -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../../static/scripts/bootstrap.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../static/scripts/bootstrap.bundle.js" charset="utf-8"></script>
 
     <!-- Ace -->
     <script type="text/javascript" src="../../static/scripts/ace/ace.js" charset="utf-8"></script>
