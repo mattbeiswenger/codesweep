@@ -254,8 +254,6 @@
                         // write errors to error tab
                         if (data.error) {
                             $('#console').text(data.error);
-                            // trigger click to go to tab
-                            $('#console-tab').trigger('click');
                             // if it's there, remove muted text and add
                             // red text
                             $('#console').removeClass("text-muted");
@@ -288,7 +286,6 @@
 
                         if (data.diff_results) {
                             $('#outputs').text("incorrect");
-                            $('#outputs-tab').trigger('click');
                         }
                         else {
                             $('#outputs').text("correct");
