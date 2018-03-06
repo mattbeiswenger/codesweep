@@ -30,11 +30,18 @@ def index(request):
 
 @login_required
 def assignments(request):
-	course_list = Course.objects.filter(students = request.user)
-	assignment_list = Assignment.objects.all()
+	terms = Course.objects.filter(students = request.user).values('term__season', 'term__year').distinct()
+	courses = Course.objects.filter(students = request.user)
+	assignments = Assignment.objects.filter(course__in=courses)
+
+
+
+
+
 	context_dict = {
-		'assignments': assignment_list,
-		'courses': course_list,
+		'assignments': assignments,
+		'courses': courses,
+		'terms': terms,
 	}
 	return render(request, 'mainapp/assignments.html', context_dict)
 
