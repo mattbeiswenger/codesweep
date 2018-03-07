@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="../../static/css/bootstrap.css">
     <link rel="stylesheet" href="../../static/css/bootstrap-grid.css">
     <link rel="stylesheet" href="../../static/css/bootstrap-reboot.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="../../static/css/styles.css">
 
 	<title>CodeSweep | Assignments</title>
   </head>
@@ -55,21 +57,6 @@
 			<div class="col-md-4 mt-5">
 
 
-
-				<!-- {% if courses %}
-				<div class="card w-100">
-					<div class="card-header">
-						Courses
-					</div>
-					<div class="list-group">
-						<a href="#" class="list-group-item list-group-item-action">All</a> {% for course in courses %}
-						<a href="{{ course.subject }}{{ course.number }}" class="list-group-item list-group-item-action">{{ course.subject }} {{ course.number }}</a> {% endfor %}
-					</div>
-				</div>
-				{% endif %} -->
-				<!--  -->
-
-
                 <!--  COURSES CARD -->
 				<div id="accordion">
                   {% for term in terms %}
@@ -84,10 +71,9 @@
 				    <div id="body{{ forloop.counter }}" class="collapse {%if forloop.counter == 1%}show{%endif%}" aria-labelledby="heading{{forloop.counter}}" data-parent="#accordion">
 						<div class="list-group">
     						{% for course in courses %}
-
                             {% if course.term.year == term.term__year %}
                             {% if course.term.season == term.term__season %}
-    						<a href="{{ course.season }}{{ course.year }}" class="list-group-item list-group-item-action">{{ course.subject }} {{ course.number }} {{ course.section }}</a>
+    						<div style="cursor:pointer;" href="" class="list-group-item list-group-item-action">{{ course.subject }} {{ course.number }} {{ course.section }}</div>
                             {% endif %}
                             {% endif %}
                             {% endfor %}
@@ -138,15 +124,34 @@
 	<script>
 		$(document).ready(function() {
 
+            $(".list-group-item").click(function() {
 
-			// {% for course in courses %}
-			// alert("{{ course.subject }}");
-			// {% endfor %}
+                var course = this.text.split(" ");
+                var course_subject = course[0];
+                var course_number = course[1];
+                var course_section = course[2];
 
-			$('#myList a').click(function(e) {
-				e.preventDefault()
-				$(this).tab('show')
-			})
+                var term = this.closest(".card-header");
+                alert(term.text);
+                alert("hello");
+
+
+                // $.ajax({
+    			// 	url: '/assignments/',
+    			// 	type: "POST",
+    			// 	data: {
+                //
+    			// 	},
+                //
+    			// 	success: function(data) {
+    			// 		// alert(data.greeting)
+    			// 	}
+    			// });
+
+            });
+
+
+
 			// send user data to view
 			$.ajax({
 				url: '/assignments/',
@@ -155,10 +160,6 @@
 					"user": "{{ request.user.username }}",
 					"csrfmiddlewaretoken": "{{ csrf_token }}",
 				},
-
-				success: function(data) {
-					// alert(data.greeting)
-				}
 			});
 		});
 	</script>
