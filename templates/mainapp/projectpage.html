@@ -151,6 +151,8 @@
     <!-- Bootstrap JS -->
     <script type="text/javascript" src="../../static/scripts/bootstrap.js" charset="utf-8"></script>
     <script type="text/javascript" src="../../static/scripts/bootstrap.bundle.js" charset="utf-8"></script>
+    <!--  Font Awesome -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 
     <!-- Ace -->
     <script type="text/javascript" src="../../static/scripts/ace/ace.js" charset="utf-8"></script>
@@ -285,10 +287,11 @@
                         }
 
                         if (data.diff_results) {
-                            $('#outputs').text("incorrect");
+                            $('#outputs').html("<h3>Incorrect<i id='incorrect-icon' class='fas fa-check-circle'></i></h3>");
                         }
                         else {
-                            $('#outputs').text("correct");
+                            $('#outputs').html("<h3>Correct<i id='correct-icon' class='fas fa-check-circle'></i></h3>");
+
                         }
                     }
                 });
