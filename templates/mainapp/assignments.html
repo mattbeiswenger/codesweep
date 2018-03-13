@@ -73,7 +73,7 @@
     						{% for course in courses %}
                             {% if course.term.year == term.term__year %}
                             {% if course.term.season == term.term__season %}
-    						<div style="cursor:pointer;" href="" class="list-group-item list-group-item-action">{{ course.subject }} {{ course.number }} {{ course.section }}</div>
+    						<a href="{{course.subject}}{{course.number}}{{course.section}}" style="cursor:pointer;" href="" class="list-group-item list-group-item-action">{{ course.subject }} {{ course.number }} {{ course.section }}</a>
                             {% endif %}
                             {% endif %}
                             {% endfor %}
@@ -114,7 +114,10 @@
 
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script type="text/javascript" src="../../static/scripts/bootstrap.js" charset="utf-8"></script>
     <script type="text/javascript" src="../../static/scripts/bootstrap.bundle.js" charset="utf-8"></script>
@@ -126,41 +129,39 @@
 
             $(".list-group-item").click(function() {
 
-                var course = this.text.split(" ");
+                var course = $(this).text().split(" ");
                 var course_subject = course[0];
                 var course_number = course[1];
                 var course_section = course[2];
 
-                var term = this.closest(".card-header");
-                alert(term.text);
-                alert("hello");
+                var $term = $(this).parent().parent().prev().find(".btn-link");
+                var term = $term.text().split("/");
+                var term_season = term[0].trim();
+                var term_year = term[1].trim();
 
 
-                // $.ajax({
-    			// 	url: '/assignments/',
-    			// 	type: "POST",
-    			// 	data: {
-                //
-    			// 	},
-                //
-    			// 	success: function(data) {
-    			// 		// alert(data.greeting)
-    			// 	}
-    			// });
+
+
+
+                $.ajax({
+    				url: '/assignments/' + course_subject + course_number + course_section + '/',
+    				type: "POST",
+    				data: {
+                        "course_subject": course_subject,
+                        "course_number": course_number,
+                        "course_section": course_section,
+                        "term_season": term_season,
+                        "term_year": term_year,
+                        "csrfmiddlewaretoken": "{{ csrf_token }}",
+    				},
+
+    				success: function(data) {
+    					// alert(data.greeting)
+    				}
+    			});
 
             });
 
-
-
-			// send user data to view
-			$.ajax({
-				url: '/assignments/',
-				type: "POST",
-				data: {
-					"user": "{{ request.user.username }}",
-					"csrfmiddlewaretoken": "{{ csrf_token }}",
-				},
-			});
 		});
 	</script>
 </body>

@@ -45,8 +45,8 @@ class Course(models.Model):
     subject = models.CharField(max_length=3)
     number = models.CharField(max_length=3)
     section = models.CharField(max_length=3)
-    professor = models.ForeignKey("auth.User", limit_choices_to={'groups__name': "Faculty"}, related_name="faculty_profile")
-    term = models.ForeignKey(Term)
+    professor = models.ForeignKey("auth.User", limit_choices_to={'groups__name': "Faculty"}, related_name="faculty_profile", on_delete=models.CASCADE)
+    term = models.ForeignKey(Term, on_delete=models.CASCADE)
     students = models.ManyToManyField("auth.User", limit_choices_to={'groups__name': "Student"}, related_name="student_profile")
 
     def __str__(self):
@@ -70,7 +70,7 @@ class Assignment(models.Model):
                     characters that are within comments, compared to the \
                     entire body of code")
     slug = models.SlugField(unique=True)
-    course = models.ForeignKey(Course)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
     instruction_file = models.ManyToManyField(InstructionFile, blank=True)
 
 
@@ -87,11 +87,11 @@ class Assignment(models.Model):
 
 
 class Submission(models.Model):
-    assignment = models.ForeignKey(Assignment, editable=False)
+    assignment = models.ForeignKey(Assignment, editable=False, on_delete=models.CASCADE)
     file = models.FileField(blank=True, null=True, editable=False)
     date_submitted = models.DateField(blank=True)
     time_submitted = models.TimeField(blank=True)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     correct = models.BooleanField(default=False)
     comment_ratio = models.IntegerField()
 

@@ -30,19 +30,37 @@ def index(request):
 
 @login_required
 def assignments(request):
+
 	terms = Course.objects.filter(students = request.user).values('term__season', 'term__year').distinct()
 	courses = Course.objects.filter(students = request.user)
 	assignments = Assignment.objects.filter(course__in=courses)
 
+	if request.method == 'POST':
 
+		# retrive ajax data
+		data = request.POST
+		course_subject = data['course_subject']
+		course_number = data['course_number']
+		course_section = data['course_section']
+		term_season = data['term_season']
+		term_year = data['term_year']
 
+		# get the associated course for the click
+		course = Course.objects.filter(subject = course_subject,
+									number = course_number,
+									section = course_section,
+									term__year = term_year,
+									term__season = term_season)
 
+		# get the assignments associated with that course
+		assignments = Assignment.objects.filter(course = course)
 
 	context_dict = {
 		'assignments': assignments,
 		'courses': courses,
 		'terms': terms,
 	}
+
 	return render(request, 'mainapp/assignments.html', context_dict)
 
 @login_required
@@ -55,6 +73,45 @@ def show_assignment(request, assignment_name_slug):
 		context_dict['assignment'] = None
 
 	return render(request, 'mainapp/projectpage.html', context_dict)
+
+def find_assignments(request):
+
+	if request.method == 'POST':
+
+		# retrive ajax data
+		data = request.POST
+		course_subject = data['course_subject']
+		course_number = data['course_number']
+		course_section = data['course_section']
+		term_season = data['term_season']
+		term_year = data['term_year']
+
+		# terms in which user is enrolled
+		terms = Course.objects.filter(students = request.user).values('term__season', 'term__year').distinct()
+
+		# courses in which user is enrolled
+		courses = Course.objects.filter(students = request.user)
+
+		# get the associated course for the click
+		course = Course.objects.filter(subject = course_subject,
+									number = course_number,
+									section = course_section,
+									term__year = term_year,
+									term__season = term_season)
+
+		# get the assignments associated with that course
+		assignments = Assignment.objects.filter(course = course)
+
+		context_dict = {
+			'assignments': assignments,
+			'courses': courses,
+			'terms': terms,
+		}
+
+		return render(request, 'mainapp/projectpage.html', context_dict)
+
+	else:
+			raise Http404()
 
 
 def submit_text(request):
