@@ -53,6 +53,6 @@ docs/_build/
 
 # additions #
 temp_files/
-testing.py
-db.sqlite3
 media/
+db.sqlite3
+testing.py
