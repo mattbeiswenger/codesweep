@@ -13,19 +13,19 @@ The purpose of this project is to establish a proof of concept for an intelligen
 # Installation for Testing
 Assuming that Python 3.0, pip, and git are installed on your computer, perform the following steps:
 
-1. Install Django with pip3
+1. Install Django with pip3 -
 `pip3 install django`
 
-2. Clone this repository in the desired folder
+2. Clone this repository in the desired folder -
 `git clone https://github.com/mbeiswenger/codesweep`
 
-3. Within the codesweep project directory, migrate the database
+3. Within the codesweep project directory, migrate the database -
 `python3 manage.py migrate`
 
-4. Populate the database with the population script
+4. Populate the database with the population script - 
 `python3 populate-codesweep.py`
 
-## To Be Implemented
+# To Be Implemented
 - [ ] Update the courses shown when student clicks on a course in the list group
 - [ ] Create slugs for term and course so that assignments can have the same name
 - [ ] Display whether or not the current user has completed the assignment
