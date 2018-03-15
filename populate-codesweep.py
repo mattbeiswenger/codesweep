@@ -153,9 +153,8 @@ def populate():
 									professor=p,
 									term=t)
 
-		print("Created course: subject = {}, number = {}, section = {}, \
-		+ professor = {}".format(course['subject'], course['number'],
-									course['section'], course['professor'],))
+		print("Created course: subject = {}, number = {}, ".format(course['subject'], course['number']) + \
+		"section = {}, professor = {}".format(course['section'], course['professor']))
 
 		for student in course['students']:
 			c.students.add(User.objects.get(username=student))
@@ -176,7 +175,7 @@ def populate():
 												comment_to_code_ratio=assignment['comment_to_code_ratio'],
 												slug=assignment['slug'],
 												course=c)
-
+		print("Created assignment: " + assignment['title'] + " in " + str(c))
 # start execution here
 if __name__ == '__main__':
 	print("Starting Codesweep population script...")
