@@ -22,8 +22,11 @@ Assuming that Python 3.0, pip, and git are installed on your computer, perform t
 3. Within the codesweep project directory, migrate the database -
 `python3 manage.py migrate`
 
-4. Populate the database with the population script - 
+4. Populate the database with the population script -
 `python3 populate-codesweep.py`
+
+5. Run Django's local server -
+`python3 manage.py runserver`
 
 # To Be Implemented
 - [ ] Update the courses shown when student clicks on a course in the list group
