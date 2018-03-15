@@ -7,8 +7,7 @@ import datetime
 
 class InstructionFile(models.Model):
     title = models.CharField(max_length=100)
-    file = models.FileField(blank=True, null=True,
-        upload_to='instructionfiles/%Y/%m/%d')
+    file = models.FileField(upload_to='instructionfiles/%Y/%m/%d')
 
     def __str__(self):
         return self.title
@@ -39,6 +38,7 @@ class Term(models.Model):
 
     class Meta:
         ordering = ['year', 'season']
+        unique_together = ("year", "season")
 
 
 class Course(models.Model):
@@ -47,7 +47,7 @@ class Course(models.Model):
     section = models.CharField(max_length=3)
     professor = models.ForeignKey("auth.User", limit_choices_to={'groups__name': "Faculty"}, related_name="faculty_profile", on_delete=models.CASCADE)
     term = models.ForeignKey(Term, on_delete=models.CASCADE)
-    students = models.ManyToManyField("auth.User", limit_choices_to={'groups__name': "Student"}, related_name="student_profile")
+    students = models.ManyToManyField("auth.User", limit_choices_to={'groups__name': "Student"}, related_name="student_profile", blank=True)
 
     def __str__(self):
         return '{}_{}_{}'.format(self.subject, self.number, self.section)
@@ -73,9 +73,6 @@ class Assignment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     instruction_file = models.ManyToManyField(InstructionFile, blank=True)
 
-
-
-
     # slug feature
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -87,12 +84,12 @@ class Assignment(models.Model):
 
 
 class Submission(models.Model):
-    assignment = models.ForeignKey(Assignment, editable=False, on_delete=models.CASCADE)
-    file = models.FileField(blank=True, null=True, editable=False)
-    date_submitted = models.DateField(blank=True)
-    time_submitted = models.TimeField(blank=True)
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+    file = models.FileField()
+    date_submitted = models.DateField()
+    time_submitted = models.TimeField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    correct = models.BooleanField(default=False)
+    correct = models.BooleanField()
     comment_ratio = models.IntegerField()
 
     def __FieldFile__(self):
