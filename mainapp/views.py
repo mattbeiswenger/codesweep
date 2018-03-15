@@ -158,25 +158,27 @@ def submit_text(request):
 		# un-escape backslash-escaped code string
 		code = bytes(code, "utf-8").decode("unicode_escape")
 
-		# create directories if they do not exist
-		if not os.path.exists(settings.MEDIA_ROOT, 'code'):
-			os.makedirs(setting.MEDIA_ROOT, 'code')
-		if not os.path.exists(settings.MEDIA_ROOT, 'inputs', assignment_title):
-			os.makedirs(settings.MEDIA_ROOT, 'inputs', assignment_title)
-		if not os.path.exists(settings.MEDIA_ROOT, 'expectedoutputs', assignment_title):
-			os.makedirs(settings.MEDIA_ROOT, 'expectedoutputs', assignment_title)
-		if not os.path.exists('temp_files', 'code_output_files'):
-			os.makedirs('temp_files', 'code_output_files')
+		# create paths for submission files
+		code_path = os.path.join(settings.MEDIA_ROOT, 'code')
+		inputs_path = os.path.join(settings.MEDIA_ROOT, 'inputs', assignment_title)
+		expected_outputs_path = os.path.join(settings.MEDIA_ROOT, 'expectedoutputs', assignment_title)
+		code_output_path = os.path.join('temp_files', 'code_output_files')
 
-		# create paths to individual files
-		code_path = os.path.join(settings.MEDIA_ROOT, 'code', python_code_file)
-		inputs_path = os.path.join(settings.MEDIA_ROOT, 'inputs', assignment_title, 'inputs.txt')
-		expected_outputs_path = os.path.join(settings.MEDIA_ROOT, 'expectedoutputs', assignment_title, 'expected--outputs.txt')
-		code_output_path = os.path.join('temp_files', 'code_output_files', code_output_file)
+		# create directories if they do not already exist
+		if not os.path.exists(code_path):
+			os.makedirs(code_path)
+		if not os.path.exists(inputs_path):
+			os.makedirs(inputs_path)
+		if not os.path.exists(expected_outputs_path):
+			os.makedirs(expected_outputs_path)
+		if not os.path.exists(code_output_path):
+			os.makedirs(code_ouput_path)
 
-		# if the directories for the inputs path don't exist, make them
-		os.makedirs(os.path.dirname(inputs_path), exist_ok=True)
-		os.makedirs(os.path.dirname(expected_outputs_path), exist_ok=True)
+		# append files to each path
+		code_path = os.path.join(code_path, python_code_file)
+		inputs_path = os.path.join(inputs_path, 'inputs.txt')
+		expected_outputs_path = os.path.join(expected_outputs_path, 'expected--outputs.txt')
+		code_output_path = os.path.join(code_output_path, code_output_file)
 
 		# create inputs file
 		with open(inputs_path, 'w') as inputs_file:
