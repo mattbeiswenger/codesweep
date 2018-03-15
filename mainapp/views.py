@@ -172,7 +172,7 @@ def submit_text(request):
 		if not os.path.exists(expected_outputs_path):
 			os.makedirs(expected_outputs_path)
 		if not os.path.exists(code_output_path):
-			os.makedirs(code_ouput_path)
+			os.makedirs(code_output_path)
 
 		# append files to each path
 		code_path = os.path.join(code_path, python_code_file)
