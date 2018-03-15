@@ -163,6 +163,8 @@ def submit_text(request):
 		inputs_path = os.path.join(settings.MEDIA_ROOT, 'inputs', assignment_title)
 		expected_outputs_path = os.path.join(settings.MEDIA_ROOT, 'expectedoutputs', assignment_title)
 		code_output_path = os.path.join('temp_files', 'code_output_files')
+		diff_path = os.path.join('temp_files', 'diff_files')
+		error_path = os.path.join('temp_files', 'error_files')
 
 		# create directories if they do not already exist
 		if not os.path.exists(code_path):
@@ -173,7 +175,10 @@ def submit_text(request):
 			os.makedirs(expected_outputs_path)
 		if not os.path.exists(code_output_path):
 			os.makedirs(code_output_path)
-
+		if not os.path.exists(diff_path):
+			os.makedirs(diff_path)
+		if not os.path.exists(error_path):
+			os.makedirs(error_path)
 		# append files to each path
 		code_path = os.path.join(code_path, python_code_file)
 		inputs_path = os.path.join(inputs_path, 'inputs.txt')
