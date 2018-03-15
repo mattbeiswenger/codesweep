@@ -52,7 +52,7 @@ coverage.xml
 docs/_build/
 
 # additions #
-temp_files/
 media/
+temp_files/
 db.sqlite3
 testing.py
