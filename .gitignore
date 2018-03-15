@@ -1,4 +1,4 @@
-# gitignore boilerplate #
+# ---- GITIGNORE BOILERPLATE ---- #
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -51,8 +51,12 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
-# additions #
-media/
+# ---- ADDITIONS ---- #
+
+# create empty media folder
+media/*
+!media/.gitkeep
+
 temp_files/
 db.sqlite3
 testing.py

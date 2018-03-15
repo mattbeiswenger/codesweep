@@ -119,6 +119,7 @@ def submit_text(request):
 	if request.method == 'POST':
 
 
+
 		data = request.POST # retrieve data
 
 		code = data['code_text'] # obtain submitted code
@@ -160,9 +161,21 @@ def submit_text(request):
 		# create paths to individual files
 		code_path = os.path.join(settings.MEDIA_ROOT, 'code', python_code_file)
 		inputs_path = os.path.join(settings.MEDIA_ROOT, 'inputs', assignment_title, 'inputs.txt')
-		sysargv_path = os.path.join(settings.STATIC_DIR, 'sysargv', 'sysargv.txt')
 		expected_outputs_path = os.path.join(settings.MEDIA_ROOT, 'expectedoutputs', assignment_title, 'expected--outputs.txt')
 		code_output_path = os.path.join('temp_files', 'code_output_files', code_output_file)
+
+		# create directories if they do not exist
+		if not os.path.exists(code_path):
+			os.makedirs(code_path)
+
+		if not os.path.exists(inputs_path):
+			os.makedirs(inputs_path)
+
+		if not os.path.exists(expected_outputs_path):
+			os.makedirs(expected_outputs_path)
+
+		if not os.path.exists(code_output_path):
+			os.makedirs(code_output_path)
 
 		# if the directories for the inputs path don't exist, make them
 		os.makedirs(os.path.dirname(inputs_path), exist_ok=True)
