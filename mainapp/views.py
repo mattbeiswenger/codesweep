@@ -165,16 +165,16 @@ def submit_text(request):
 		code_output_path = os.path.join('temp_files', 'code_output_files', code_output_file)
 
 		# create directories if they do not exist
-		if not os.path.exists(os.path.join(code_path, '..'):
+		if not os.path.exists(os.path.join(code_path, '..')):
 			os.makedirs(code_path)
 
-		if not os.path.exists(os.path.join(inputs_path, '..'):
+		if not os.path.exists(os.path.join(inputs_path, '..')):
 			os.makedirs(inputs_path)
 
-		if not os.path.exists(os.path.join(expected_outputs_path, '..'):
+		if not os.path.exists(os.path.join(expected_outputs_path, '..')):
 			os.makedirs(expected_outputs_path)
 
-		if not os.path.exists(os.path.join(,code_output_path, '..'):
+		if not os.path.exists(os.path.join(,code_output_path, '..')):
 			os.makedirs(code_output_path)
 
 		# if the directories for the inputs path don't exist, make them
