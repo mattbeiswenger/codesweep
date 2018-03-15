@@ -212,8 +212,15 @@ def submit_text(request):
 						else:
 							variable += c
 
-					if not inDoubleQuotes and c.isdigit():
+					# negative integers
+					if not inDoubleQuotes and index > 0 and c.isdigit() and line[index - 1] == "-":
+						neg_num = "-" + c
+						numVariable += neg_num
+
+					# positive integers
+					elif not inDoubleQuotes and c.isdigit():
 						numVariable += c
+
 
 					if not inDoubleQuotes and line[index:index + 5] == "False":
 						variableList.append("False")
