@@ -16,9 +16,6 @@ import os
 import datetime
 import re
 
-# for debugging
-import sys
-
 
 def index(request):
 	if request.user.is_authenticated():
@@ -179,6 +176,7 @@ def submit_text(request):
 			os.makedirs(diff_path)
 		if not os.path.exists(error_path):
 			os.makedirs(error_path)
+
 		# append files to each path
 		code_path = os.path.join(code_path, python_code_file)
 		inputs_path = os.path.join(inputs_path, 'inputs.txt')
