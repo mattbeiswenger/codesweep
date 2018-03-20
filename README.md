@@ -29,7 +29,7 @@ Assuming that Python 3.0, pip, and git are installed on your computer, perform t
 `python3 manage.py runserver`
 
 # To Be Implemented
-- [ ] Update the courses shown when student clicks on a course in the list group
+- [x] Update the assignments shown when student clicks on a course in the list group
 - [ ] Create slugs for term and course so that assignments can have the same name
 - [ ] Display whether or not the current user has completed the assignment
 - [ ] Provide option for students to look at history of submitted code
