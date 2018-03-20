@@ -16,6 +16,7 @@ import os
 import datetime
 import re
 
+import sys
 
 def index(request):
 	if request.user.is_authenticated():
@@ -32,25 +33,25 @@ def assignments(request):
 	courses = Course.objects.filter(students = request.user)
 	assignments = Assignment.objects.filter(course__in=courses)
 
-	if request.method == 'POST':
-
-		# retrive ajax data
-		data = request.POST
-		course_subject = data['course_subject']
-		course_number = data['course_number']
-		course_section = data['course_section']
-		term_season = data['term_season']
-		term_year = data['term_year']
-
-		# get the associated course for the click
-		course = Course.objects.filter(subject = course_subject,
-									number = course_number,
-									section = course_section,
-									term__year = term_year,
-									term__season = term_season)
-
-		# get the assignments associated with that course
-		assignments = Assignment.objects.filter(course = course)
+	# if request.method == 'POST':
+	#
+	# 	# retrive ajax data
+	# 	data = request.POST
+	# 	course_subject = data['course_subject']
+	# 	course_number = data['course_number']
+	# 	course_section = data['course_section']
+	# 	term_season = data['term_season']
+	# 	term_year = data['term_year']
+	#
+	# 	# get the associated course for the click
+	# 	course = Course.objects.filter(subject = course_subject,
+	# 								number = course_number,
+	# 								section = course_section,
+	# 								term__year = term_year,
+	# 								term__season = term_season)
+	#
+	# 	# get the assignments associated with that course
+	# 	assignments = Assignment.objects.filter(course = course)
 
 	context_dict = {
 		'assignments': assignments,
@@ -99,13 +100,27 @@ def find_assignments(request):
 		# get the assignments associated with that course
 		assignments = Assignment.objects.filter(course = course)
 
-		context_dict = {
-			'assignments': assignments,
-			'courses': courses,
-			'terms': terms,
+		assignments_html = []
+		for assignment in assignments:
+			assignments_html += '<div class="card mt-5"><div class="card-header"><div>' + \
+				'Due ' + str(assignment.date_due) + ' at ' +  str(assignment.time_due) + \
+				'<div class="float-right">' + \
+				'Points: ' + str(assignment.points) + \
+				'</div></div></div>' + \
+				'<div class="card-body">' + \
+				'<h5 class="card-title">' + assignment.title + '</h5>' + \
+				'<p class="card-text">' + assignment.description + '</p>' + \
+				'<a href="' + assignment.slug + '" class="btn btn-primary float-right btn-info">Get Started</a>' + \
+				'</div></div>'
+
+		assignments_html = "".join(assignments_html);
+
+		# create JSON data response
+		data = {
+			'assignments_html': assignments_html,
 		}
 
-		return render(request, 'mainapp/projectpage.html', context_dict)
+		return JsonResponse(data)
 
 	else:
 			raise Http404()

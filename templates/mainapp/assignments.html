@@ -73,7 +73,7 @@
     						{% for course in courses %}
                             {% if course.term.year == term.term__year %}
                             {% if course.term.season == term.term__season %}
-    						<a href="{{course.subject}}{{course.number}}{{course.section}}" style="cursor:pointer;" href="" class="list-group-item list-group-item-action">{{ course.subject }} {{ course.number }} {{ course.section }}</a>
+    						<a style="cursor:pointer;" class="list-group-item list-group-item-action">{{ course.subject }} {{ course.number }} {{ course.section }}</a>
                             {% endif %}
                             {% endif %}
                             {% endfor %}
@@ -86,7 +86,7 @@
 
 
 			<!--  ASSIGNMENTS -->
-			<div class="animated bounceInUp col col-lg-8 mb-5">
+			<div class="animated bounceInUp col col-lg-8 mb-5" id="assignments-container">
 				{% if assignments %} {% for assignment in assignments %}
 				<div class="card mt-5">
 					<div class="card-header">
@@ -144,7 +144,7 @@
 
 
                 $.ajax({
-    				url: '/assignments/' + course_subject + course_number + course_section + '/',
+    				url: '/assignments/find-assignments/',
     				type: "POST",
     				data: {
                         "course_subject": course_subject,
@@ -156,7 +156,10 @@
     				},
 
     				success: function(data) {
-    					// alert(data.greeting)
+    					if(data.assignments_html) {
+                            $('#assignments-container').html( data.assignments_html);
+                        }
+
     				}
     			});
 
