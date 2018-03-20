@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="../../static/css/bootstrap-reboot.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" type="text/css" href="../../static/css/styles.css">
+    <!-- Animate CSS -->
+    <link rel="stylesheet" type="text/css" href="../../static/css/animate.css">
 
 	<title>CodeSweep | Assignments</title>
   </head>
@@ -87,11 +89,14 @@
 
 			<!--  ASSIGNMENTS -->
 			<div class="animated bounceInUp col col-lg-8 mb-5" id="assignments-container">
+                <div class="display-4 mt-5 text-center">
+                    All Assignments
+                </div>
 				{% if assignments %} {% for assignment in assignments %}
 				<div class="card mt-5">
 					<div class="card-header">
 						<div>
-							Due {{ assignment.date_due }} at {{ assignment.time_due }}
+							Due {{ assignment.date_due|date:"F d, Y" }} at {{ assignment.time_due|time:"g A" }}
 							<div class="float-right">
 								Points: {{ assignment.points }}
 							</div>

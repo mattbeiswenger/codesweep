@@ -91,7 +91,7 @@ def find_assignments(request):
 		courses = Course.objects.filter(students = request.user)
 
 		# get the associated course for the click
-		course = Course.objects.filter(subject = course_subject,
+		course = Course.objects.get(subject = course_subject,
 									number = course_number,
 									section = course_section,
 									term__year = term_year,
@@ -101,9 +101,10 @@ def find_assignments(request):
 		assignments = Assignment.objects.filter(course = course)
 
 		assignments_html = []
+		assignments_html += '<div class="display-4 mt-5 text-center">' + str(course.subject + ' ' + course.number + ' ' + course.section) + '</div>'
 		for assignment in assignments:
 			assignments_html += '<div class="card mt-5"><div class="card-header"><div>' + \
-				'Due ' + str(assignment.date_due) + ' at ' +  str(assignment.time_due) + \
+				'Due ' + str(assignment.date_due.strftime('%B %d, %Y')) + ' at ' +  str(assignment.time_due.strftime('%-I %p')) + \
 				'<div class="float-right">' + \
 				'Points: ' + str(assignment.points) + \
 				'</div></div></div>' + \
