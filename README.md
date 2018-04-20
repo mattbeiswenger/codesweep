@@ -40,3 +40,4 @@ Assuming that Python 3.0, pip, and git are installed on your computer, perform t
 - [ ] Display correctness for each test case instead of displaying a binary value of either 'correct' or 'incorrect'
 - [ ] Display badge on course list group showing number of uncompleted assignments
 - [ ] Utilize AJAX for login authentication
+- [ ] Provide data analysis page for professors to understand statistics about individual students and the class as a whole
